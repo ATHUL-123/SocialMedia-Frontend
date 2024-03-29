@@ -23,14 +23,17 @@ export const adminLogin= (data) => {
 };
 
 
-export const getAllUsers = ()=>{
+export const getAllUsers = (page,usersPerPage)=>{
+
     return new Promise((resolve,reject)=>{
         try {
-            apiCall("get", adminUrl.getAllUsers)
+            apiCall("get", adminUrl.getAllUsers(page,usersPerPage))
                 .then((response) => {
+                  
                     resolve(response);
                 })
                 .catch((error) => {
+                    console.log(error);
                     reject(error); 
                 });
         } catch (error) {
@@ -54,4 +57,39 @@ export const toggleUserBlock =(userId)=>{
             reject(error)
         }    
     })
+}
+
+export const getAllReports = (page,limit)=>{
+    return new Promise((resolve,reject)=>{
+        try {
+            apiCall('get',adminUrl.getAllReports(page,limit))
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error); 
+            });
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+export const takeAction =(targetId)=>{
+    console.log('dd');
+    console.log(targetId);
+     return new Promise((resolve,reject)=>{
+        try {
+            apiCall('put',adminUrl.takeAction(targetId))
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                console.log(error);
+                reject(error); 
+            });
+        } catch (error) {
+            reject(error)
+        }
+     })
 }

@@ -8,7 +8,17 @@ const BASE_URL ='http://localhost:7002'
 const userLogin = async (data)=>{
     const response = await axios.post(BASE_URL+API_URL+'/login',data)
     if(response.data){
-        console.log('settedd');
+     
+        localStorage.setItem('user',JSON.stringify(response.data.user))
+    }
+    return response.data
+}
+
+const GoogleUserLogin = async (data)=>{
+    console.log('insideeeee');
+    const response = await axios.post(BASE_URL+API_URL+'/google-login',data)
+    if(response.data){
+     
         localStorage.setItem('user',JSON.stringify(response.data.user))
     }
     return response.data
@@ -19,7 +29,7 @@ const userLogin = async (data)=>{
 const authService ={
 
     userLogin,
-  
+    GoogleUserLogin
 
 }
 

@@ -3,7 +3,7 @@ import React from 'react'
 const OnlinePeople = () => {
   return (
 <div className="h-80vh py-8 px-10 overflow-y-auto ml-10 mt-10 bg-white border-l border-r sm:w-64 w-60 dark:bg-gray-900 dark:border-gray-700">
-  <h2 className="px-5 text-lg font-medium text-gray-800 dark:text-white">Accounts</h2>
+  <h2 className="px-5 text-lg font-medium text-gray-800 dark:text-white">Online</h2>
 
   <div className="mt-8 space-y-4">
     <button className="flex items-center w-full py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2 hover:bg-gray-100 focus:outline-none">

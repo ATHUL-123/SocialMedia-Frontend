@@ -5,8 +5,15 @@ import { useDispatch,useSelector } from 'react-redux';
 import { setAdmin } from '../../../features/admin/adminSlice';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 function AdminLogin() {
-        
+         
+    const validationSchema = Yup.object().shape({
+        email: Yup.string().email('Invalid email').required('Email is required'),
+        password: Yup.string().required('Password is required'),
+      });
+      
         const {admin} = useSelector((state)=>state.admin)
         const dispatch = useDispatch()
         const navigate = useNavigate()
@@ -28,6 +35,7 @@ function AdminLogin() {
             adminLogin(data)
             .then((response)=>{
                 toast.success(response.message);
+                console.log(response);
                dispatch(setAdmin(response.admin))
                 navigate('/admin/dashboard')
             })

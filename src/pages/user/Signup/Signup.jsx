@@ -1,166 +1,86 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import validateForm from '../../../validation/userValidate'
 import { useNavigate } from 'react-router-dom';
 import { sentOtp } from '../../../services/User/apiMethods';
 import { Link } from 'react-router-dom';
 import { setReduxUser } from '../../../features/auth/authSlice';
 
-
 const SignupWithDesign = () => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const [formData, setFormData] = useState({
-        userName: '',
-        email: '',
-        phone: '',
-        password: '',
-        password2: ''
+    const validationSchema = Yup.object().shape({
+        userName: Yup.string()
+            .required('Username is required')
+            .min(4, 'Username must be at least 4 characters'),
+        email: Yup.string()
+            .email('Invalid email address')
+            .required('Email is required'),
+        phone: Yup.string()
+            .required('Phone number is required')
+            .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
+        password: Yup.string()
+            .required('Password is required')
+            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character'),
+        password2: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Passwords must match')
+            .required('Confirm Password is required')
     });
 
-    const { userName, email, phone, password, password2 } = formData;
-
-    const onChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value.trim() });
-    };
-
-    const onSubmit = async (e) => {
+    const onSubmit = async (values, { setSubmitting }) => {
         try {
-            e.preventDefault();
-            await validateForm(formData);
-            sentOtp(formData)
-                .then((response) => {
-                    navigate('/otp')
-                    toast.success('Otp Sent successfully');
-                    dispatch(setReduxUser(response))
-                })
-                .catch((error) => {
-                    const { message } = error.response.data;
-                    toast.error(message)
-                });
+            await sentOtp(values);
+            navigate('/otp');
+            toast.success('Otp Sent successfully');
+            dispatch(setReduxUser(values));
         } catch (error) {
-
-            toast.error(error);
+            const errorMessage = error.response ? error.response.data.message : 'An error occurred';
+            toast.error(errorMessage);
         }
+        setSubmitting(false);
     };
-
-
 
     return (
         <section className="bg-white dark:bg-gray-900">
             <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
-                <form className="w-full max-w-md" onSubmit={onSubmit}>
-                    <div className="flex justify-center mx-auto">
-                        <img className="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt="" />
-                    </div>
-
-
-
-                    <section className="form">
-                        <div className="relative flex items-center mt-8">
-                            <span className="absolute">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                            </span>
-
-                            <input
-                                type="text"
-                                className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                                placeholder="Username"
-                                name="userName"
-                                value={userName}
-                                onChange={onChange}
-                            />
-                        </div>
-
-                        <div className="relative flex items-center mt-8">
-                            <span className="absolute">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                            </span>
-
-                            <input
-                                type="email"
-                                className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                                placeholder="Email address"
-                                name="email"
-                                value={email}
-                                onChange={onChange}
-                            />
-                        </div>
-
-                        <div className="relative flex items-center mt-8">
-                            <span className="absolute">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                            </span>
-
-                            <input
-                                type="number"
-                                className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                                placeholder="Phone"
-                                name="phone"
-                                value={phone}
-                                onChange={onChange}
-                            />
-                        </div>
-
-                        <div className="relative flex items-center mt-8">
-                            <span className="absolute">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                            </span>
-
-                            <input
-                                type="password"
-                                className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                                placeholder="Password"
-                                name="password"
-                                value={password}
-                                onChange={onChange}
-                            />
-                        </div>
-
-                        <div className="relative flex items-center mt-8">
-                            <span className="absolute">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mx-3 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                            </span>
-
-                            <input
-                                type="password"
-                                className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                                placeholder="Confirm Password"
-                                name="password2"
-                                value={password2}
-                                onChange={onChange}
-                            />
-                        </div>
-
-                        <div className="mt-6">
-                            <button type="submit" className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-                                Sign Up
-                            </button>
+                <Formik initialValues={{ userName: '', email: '', phone: '', password: '', password2: '' }} validationSchema={validationSchema} onSubmit={onSubmit}>
+                    {({ isSubmitting }) => (
+                        <Form className="w-full max-w-md">
+                            <div className="flex justify-center mx-auto">
+                                <img className="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt="" />
+                            </div>
+                            <section className="form">
+                                <Field type="text" name="userName" placeholder="Username" className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-4 mb-4 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+                                <ErrorMessage name="userName" component="div" className="error-message text-red-500" />
+                                <Field type="email" name="email" placeholder="Email address" className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-4 mb-4 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+                                <ErrorMessage name="email" component="div" className="error-message text-red-500" />
+                                <Field type="text" name="phone" placeholder="Phone" className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-4 mb-4 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+                                <ErrorMessage name="phone" component="div" className="error-message text-red-500" />
+                                <Field type="password" name="password" placeholder="Password" className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-4 mb-4 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+                                <ErrorMessage name="password" component="div" className="error-message text-red-500" />
+                                <Field type="password" name="password2" placeholder="Confirm Password" className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-4 mb-4 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+                                <ErrorMessage name="password2" component="div" className="error-message text-red-500" />
+                                <button type="submit" disabled={isSubmitting} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                                    {isSubmitting ? 'Signing Up...' : 'Sign Up'}
+                                </button>
+                            </section>
 
                             <div className="mt-6 text-center ">
                                 <Link to="/login" className="text-sm text-blue-500 hover:underline dark:text-blue-400">
                                     Already have an account?
                                 </Link>
                             </div>
-                        </div>
-                    </section>
-                </form>
+                        </Form>
+                    )}
+                </Formik>
+
             </div>
         </section>
     );
 };
 
 export default SignupWithDesign;
-

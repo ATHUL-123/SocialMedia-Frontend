@@ -1,3 +1,5 @@
+import { followUsers } from "../services/User/apiMethods";
+
 export const postUrl = {
     // create: "/post/create-post",
     // getPost: "/post/fetch-posts",
@@ -15,21 +17,21 @@ export const postUrl = {
     update: (postId) => `/api/posts/update-post/${postId}`,
   
 //     //likes
-//     likePost: "/post/like-post",
-//     unlikePost: "/post/unlike-post",
+        likePost:(postId)=> `/api/posts/like-post/${postId}`,
+       unLikePost:(postId)=> `/api/posts/unlike-post/${postId}`,
   
 //     //comments
-//     fetchComments: (postId) => `/post/fetch-comments/${postId}`,
-//     fetchReplies: (commentId) => `/post/comments/replies/${commentId}`,
-//     addComment: "/post/add-comment",
-//     addReply: (commentId) => `/post/comments/reply-to/${commentId}`,
-//     deleteComment: "/post/delete-comment",
+    fetchComments: (postId) => `/api/posts/fetch-comments/${postId}`,
+    fetchReplies: (commentId) => `/api/posts/fetch-replies/${commentId}`,
+       addComment:(postId)=>`/api/posts/add-comment/${postId}`,
+    addReply: (commentId) => `/api/posts/comments/reply-to/${commentId}`,
+    deleteComment:(commentId)=> `/api/posts/delete-comment/${commentId}`,
   
 //     //report
-//     report: (userId, username) => `/post/report/post/${userId}/${username}`,
+    reportPost: (postId) => `/api/posts/report-post/${postId}`,
   
-
-  
+        getAllFollowersPost :(page,pageSize)=>`/api/posts/allfollowingsPost?page=${page}&pageSize=${pageSize}`,
+        getUserPost :(userId) => `/api/posts/getuserpost/${userId}`
 //     //toget evry posts 20 per req.
 //     getAll: `/post/get-every-posts`,
   };
@@ -48,13 +50,31 @@ export const postUrl = {
 export const adminUrl ={
   adminLogin :"/api/admin/login",
 
-  getAllUsers :"/api/admin/getallusers",
+  getAllUsers :(page,usersPerPage)=>`/api/admin/getallusers?page=${page}&limit=${usersPerPage}`,
 
   toggleBlockUser: (userId) => `/api/admin/toggle-userblock/${userId}`,
+
+  getAllReports:(page,usersPerPage)=>`/api/admin/get-reports?page=${page}&limit=${usersPerPage}`,
+
+  takeAction:(targetId)=>`/api/admin/take-action?targetId=${targetId}`
   
 }
 
   
 export const userUrl ={
-  editProfile :"/api/users/edit-profile"
+
+  editProfile :"/api/users/edit-profile",
+  fetchUsers  : (page,usersPerPage,searchQuery)=> `/api/users/fetch-users?page=${page}&limit=${usersPerPage}&searchQuery=${searchQuery}`,
+  followUser  :(followeeId)=> `/api/users/follow/${followeeId}`,
+  unFollowUser:(unFolloweeId)=> `/api/users/unfollow/${unFolloweeId}`,
+  fetchFollowees :(page,usersPerPage)=>`/api/users/fetch-following?page=${page}&limit=${usersPerPage}`,
+  fetchFollowers :(page,usersPerPage)=>`/api/users/fetch-followers?page=${page}&limit=${usersPerPage}`,
+  getSingleUser:(userId)=>`/api/users/get-single-user/${userId}`,
+  togglePrivacy :`/api/users/toggleprivacy`,
+  getRequest:`/api/users/get-request`,
+  acceptRequest:(userId)=>`/api/users/accept-request/${userId}`,  
+  rejectRequest:(userId)=>`/api/users/reject-request/${userId}`,
+  payment :`/api/users/payment/create`,
+  paymentSuccess:`/api/users/payment/success`
+  
 }

@@ -1,66 +1,86 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../../components/User/Header/Header';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getPost } from '../../../features/post/postSlice';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { logout } from '../../../features/auth/authSlice';
 import PostItem from '../../../components/User/PostList/PostList';
 import Spinner from '../../../components/User/Spinner/Spinner';
-import OnlinePeople from '../../../components/User/OnlinePeople/OnlinePeople';
 import SideProfile from '../../../components/User/SideProfile/SideProfile';
-import './Home.css'
-import { toast } from 'react-toastify';
+import './Home.css';
+import UsersList from '../../../components/User/UsersList/UsersList';
+import { getAllFollowesPost } from '../../../services/User/apiMethods';
 
 const Home = () => {
-  
-  const navigate = useNavigate()
-  const {user}=useSelector((state)=>state.auth)
-  const {posts,isLoading} = useSelector((state)=>state.post)
-  const dispatch = useDispatch()
+  const [showUserList, setShowUserList] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const pageSize = 5; // Number of posts per page
 
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!user || user.blocked) {
-        dispatch(logout())
-        navigate('/login');
-    } else {
-        dispatch(getPost());
-    }
-},[user, dispatch, navigate]);
+    setLoading(true);
+    getAllPosts();
+  }, [user, page]); // Fetch posts when user changes or page changes
 
-  if(isLoading){
-    return <Spinner/>
-}
+  const getAllPosts = () => {
+    getAllFollowesPost(page, pageSize)
+      .then((response) => {
+        // Filter out duplicate posts
+        console.log(response);
+        setPosts([...posts, ...response]);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
+
+  const handleLoadMore = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+
   return (
     <>
-   <div>
-        <Header/>
+      <div>
+        <Header toggleSearch={() => setShowUserList(!showUserList)} />
         <div className="w-full bg-indigo-100 h-screen flex flex-col md:flex-row justify-center overflow-hidden">
-        <OnlinePeople/>
+          <UsersList /> 
           <div className="flex-1 p-5 antialiased overflow-y-auto">
-            {/* Removed md:w-4/5 and replaced with flex-1 */}
             <div className="mt-3 flex flex-col items-center">
-              {/* Centered post items */}
-              
-    {posts.length > 0 ? (
-        posts.map(post => (
-            <PostItem key={post._id} post={post} />
-        ))
-    ) : (
-        <p>You have no posts</p>
-    )}
-
-
+              {posts.length > 0 ? (
+                posts.map((post) => <PostItem key={post._id} post={post} />)
+              ) : (
+                <p>No posts available</p>
+              )}
             </div>
+            {loading && (
+              <div className="flex justify-center mt-4">
+                <Spinner />
+              </div>
+            )}
+            {!loading && posts.length > 0 && (
+              <div className="flex justify-center mt-4">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none"
+                  onClick={handleLoadMore}
+                >
+                  Load More
+                </button>
+              </div>
+            )}
           </div>
-        {user && <SideProfile user={user}/>}
-          
-          
+          {user && <SideProfile user={user} />}
         </div>
       </div>
-   
-  </>
+    </>
   );
 };
 

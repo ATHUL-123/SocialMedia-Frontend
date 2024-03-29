@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { FaPlus, FaBell, FaUser, FaComments } from 'react-icons/fa';
+import { FaPlus, FaBell, FaUser, FaComments, FaSearch } from 'react-icons/fa';
 import AddPost from '../AddPost/AddPost';
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({toggleSearch }) => {
   const [showModal, setShowModal] = useState(false);
 
 
@@ -58,6 +58,9 @@ const Navbar = () => {
             <a href="/chat" className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
               <FaComments className="text-white" />
             </a>
+            <button onClick={toggleSearch}  className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
+              <FaSearch className="text-white" />
+            </button>
           </div>
         </div>
       </div>

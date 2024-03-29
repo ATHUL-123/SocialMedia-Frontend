@@ -10,7 +10,7 @@ const initialState ={
     isError:false,
     isSuccess:false,
     isLoading:false,
-    unVarified:null,
+    unVarified:unVarified ? unVarified :'',
     message:''
     
 }
@@ -23,6 +23,17 @@ export const login = createAsyncThunk('auth/login',
 async (data,thunkAPI)=>{
   try {
     return await authService.userLogin(data)
+  } catch (error) {
+    const message=(error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+  }
+}
+)
+
+export const GoogleLogin = createAsyncThunk('auth/googleLogin',
+async (data,thunkAPI)=>{
+  try {
+    return await authService.GoogleUserLogin(data)
   } catch (error) {
     const message=(error.response && error.response.data && error.response.data.message) || error.message || error.toString()
       return thunkAPI.rejectWithValue(message)
@@ -59,6 +70,14 @@ export const authSlice = createSlice({
           state.message=''
           state.isError=false
           localStorage.removeItem('user');
+        },
+        changePrivacy:(state,action)=>{
+          state.user.isPrivate = action.payload
+          localStorage.setItem('user',JSON.stringify(state.user))
+        },
+        changeVerify:(state,action)=>{
+          state.user.verified = action.payload
+          localStorage.setItem('user',JSON.stringify(state.user))
         }
     },
     extraReducers:(builder)=>{
@@ -78,10 +97,25 @@ export const authSlice = createSlice({
             state.message=action.payload.message    
             state.user=null
           })
+          .addCase(GoogleLogin.pending,(state)=>{
+            state.isLoading = true
+            state.user =null;
+          })
+          .addCase(GoogleLogin.fulfilled,(state,action)=>{
+            state.isLoading=false
+            state.user=action.payload.user
+            state.message=action.payload.message   
+          })
+          .addCase(GoogleLogin.rejected,(state,action)=>{
+            state.isLoading=false
+            state.isError=true
+            state.message=action.payload.message    
+            state.user=null
+          })
          
     }
 })
 
 
-export const {reset ,setReduxUser,setUser,logout} = authSlice.actions
+export const {reset ,setReduxUser,setUser,changePrivacy,logout,changeVerify} = authSlice.actions
 export default authSlice.reducer

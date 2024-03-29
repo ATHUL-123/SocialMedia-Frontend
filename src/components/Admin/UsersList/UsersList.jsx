@@ -10,18 +10,24 @@ function UsersList() {
     
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [usersPerPage] = useState(10); // Number of users per page
+    const [total,setTotal] = useState(0)
     
     useEffect(() => {
-        getAllUsers()
+        getAllUsers(currentPage, usersPerPage) // Pass currentPage and usersPerPage
             .then(async (response) => {
-                dispatch(setUserList(response));
-                setUsers(response);
+                setUsers([...users,...response.users]);
+                setTotal(response.totalCount);
+                console.log(response);
                 setLoading(false);
             })
             .catch((error) => {
+                console.log(error);
                 setLoading(false);
             });
-    }, [dispatch]);
+    }, [dispatch, currentPage, usersPerPage]);
+    
 
     const updateUserStatus = (userId, newStatus) => {
         const updatedUsers = users.map(user => {
@@ -33,6 +39,13 @@ function UsersList() {
         setUsers(updatedUsers);
     };
  
+    // Pagination logic
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+ 
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+
     if (loading) {
        return <Spinner/>; // Show loading indicator while fetching data
     }
@@ -58,12 +71,12 @@ function UsersList() {
                                         </th>
                                         <th scope="col" className="px-4  py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                             <div className="flex items-center">
-                                                <span>Name</span>
+                                                <span>Status</span>
                                             </div>
                                         </th>
                                         <th scope="col" className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                             <div className="flex items-center">
-                                                <span>Status</span>
+                                                <span>Name</span>
                                                 <svg className="h-3" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
                                             </div>
                                         </th>
@@ -73,16 +86,15 @@ function UsersList() {
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-4 h-4"></svg>
                                             </div>
                                         </th>
-                                        <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Email address</th>
-                                        <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Teams</th>
-                                        <th scope="col" className="relative py-3.5 px-4">
+                                        <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Action</th>
+                                      
+                                        <th scope="col" className="relative py-3.5  px-4">
                                             <span className="sr-only">Edit</span>
                                         </th>
                                     </tr>
                                 </thead>
-                               
                                 <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                                    {users.map((user, index) => (
+                                    {currentUsers.map((user, index) => (
                                         <TableData key={index} user={user} updatedUsers={updateUserStatus}/>
                                     ))}
                                 </tbody>
@@ -91,6 +103,36 @@ function UsersList() {
                     </div>
                 </div>
             </div>
+            <div className="flex mt-5">
+            <button 
+    className={`flex items-center px-4 py-2 mx-1 text-gray-500 bg-white rounded-md cursor-pointer dark:bg-gray-800 dark:text-gray-600 ${currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+    onClick={() => setCurrentPage(currentPage - 1)}
+    disabled={currentPage === 1}
+>
+    Previous
+</button>
+
+  
+
+    {Array.from({ length: Math.ceil(total / usersPerPage) }).map((_, index) => (
+        <button 
+            key={index} 
+            className={`items-center px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:flex dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200 ${index + 1 === currentPage ? '' : 'hidden'}`}
+            onClick={() => setCurrentPage(index + 1)}
+        >
+            {index + 1}
+        </button>
+    ))}
+
+    <button 
+        className="flex items-center px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200"
+        onClick={() => setCurrentPage(currentPage + 1)}
+        disabled={currentPage === Math.ceil(total / usersPerPage)} // Disable the button if currentPage is the last page
+    >
+        Next
+    </button>
+</div>
+
         </section>
     );
 }

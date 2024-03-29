@@ -39,11 +39,11 @@ function TableData({ user,updatedUsers }) {
             </td> 
 
 }
-            <td class="py-4 px-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">Developer</td>
+            <td class="py-4 px-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{user.name}</td>
             <td class="py-4 px-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{user.phone}</td>
-            <td class="py-4 px-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">Team A, Team B</td>
+         
             <td class="py-4 px-4 whitespace-nowrap text-right text-sm font-medium">
-                <button class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Profile</button>
+             
                 {user.blocked ?
                     <button onClick={toggleModal} class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300">UnBlock</button>
                     :
