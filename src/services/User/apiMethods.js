@@ -455,3 +455,36 @@ export const fetchFollowing = (page, usersPerPage) => {
       }
     })
   }
+
+
+  export const searchPost = (searchQuery)=>{
+    return new Promise ((resolve,reject)=>{
+      try {
+        apiCall('get',postUrl.searchPost(searchQuery))
+        .then((response)=>{
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+export const explorePosts = (page,pageSize)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',postUrl.explorePosts(page,pageSize))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

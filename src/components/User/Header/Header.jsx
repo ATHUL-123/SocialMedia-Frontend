@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import { FaPlus, FaBell, FaUser, FaComments, FaSearch } from 'react-icons/fa';
 import AddPost from '../AddPost/AddPost';
-import { Link } from 'react-router-dom';
+import { Link,useLocation} from 'react-router-dom';
 
-const Navbar = ({toggleSearch }) => {
+
+const Header = ({ toggleSearch, onSearch }) => {
+  const location = useLocation()
+  const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
 
+  const handleSearch = (e) => {
 
-
+    setSearchQuery(e.target.value); // Update the search query state
+    onSearch(e.target.value); // Pass the search query to the parent component
+  };
 
   const handleToggleModal = () => {
     setShowModal(!showModal);
   };
+
+  const isExploreRoute = location.pathname === '/explore'
 
   return (
     <nav className="bg-gray-800 p-2 fixed w-full z-10 top-0">
@@ -31,19 +39,22 @@ const Navbar = ({toggleSearch }) => {
               Logo
             </a>
           </div>
-          
+
           {/* Search Bar */}
+          {isExploreRoute && (
           <div className="relative">
             <input
               type="text"
               placeholder="Search"
+              value={searchQuery} // Bind the value of search query
+              onChange={handleSearch}
               className="py-1 px-3 pr-10 block w-64 bg-gray-700 text-white rounded-full focus:outline-none focus:bg-gray-600 focus:ring focus:ring-gray-300"
             />
             <button className="absolute top-0 right-0 mt-1 mr-1">
               {/* Add your search icon here */}
               {/* Example: <FaSearch className="text-white" /> */}
             </button>
-          </div>
+          </div>)}
 
           <div className="flex items-center space-x-4">
             <button onClick={handleToggleModal} className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
@@ -52,15 +63,15 @@ const Navbar = ({toggleSearch }) => {
             <a href="/notifications" className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
               <FaBell className="text-white" />
             </a>
-            <button  className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
-            <Link to="/profile"><FaUser className="text-white" /></Link>
+            <button className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
+              <Link to="/profile"><FaUser className="text-white" /></Link>
             </button>
             <a href="/chat" className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
               <FaComments className="text-white" />
             </a>
-            <button onClick={toggleSearch}  className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
-              <FaSearch className="text-white" />
-            </button>
+           <button onClick={toggleSearch} className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
+           <Link to="/explore">    <FaSearch className="text-white" /></Link>
+            </button> 
           </div>
         </div>
       </div>
@@ -69,4 +80,4 @@ const Navbar = ({toggleSearch }) => {
   );
 };
 
-export default Navbar;
+export default Header;

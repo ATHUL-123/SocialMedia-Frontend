@@ -4,11 +4,11 @@ export const postUrl = {
     // create: "/post/create-post",
     // getPost: "/post/fetch-posts",
   
-    // getPostCount: "/post/fetch-count",
+    explorePosts: (page,pageSize)=>`/api/posts/explore-posts?page=${page}&pageSize=${pageSize}`,
   
     // getSinglePost: (postId) => `/post/fetch-single-post/${postId}`,
   
-    // getUserPosts: "/post/fetchUserPosts",
+    searchPost:(searchQuery)=> `/api/posts/search-post?searchQuery=${searchQuery}`,
   
     //delete post
     deletePost: (postId) => `/api/posts/delete-post/${postId}`,

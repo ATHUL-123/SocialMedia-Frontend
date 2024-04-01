@@ -15,40 +15,32 @@ const UsersList = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { data, total } = await fetchUsers(page,usersPerPage,searchQuery);
-        setUsers([...users, ...data]); // Set users to the new data directly
+        const { data, total } = await fetchUsers(page, usersPerPage, searchQuery);
+        if(page===1){
+          setUsers(data); // Replace the existing users with the new data
+        }else{
+          setUsers([...users,...data])
+        }
+      
         setTotalUsers(total);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
       setLoading(false);
     };
-    
-  
-    fetchData();
-  }, [page, usersPerPage]);
 
-  const handleSearch =async (e) => {
-    try {
-      setLoading(true);
-      const newSearchQuery = e.target.value;
-      setSearchQuery(prevSearchQuery => prevSearchQuery + newSearchQuery); 
-      console.log(newSearchQuery);
-      const { data ,total } = await fetchUsers(page,usersPerPage,newSearchQuery)
-      setUsers(data); 
-      setTotalUsers(total);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    }
-    setLoading(false);
+    fetchData();
+  }, [page, searchQuery, usersPerPage]);
+
+  const handleSearch = async (e) => {
+    const newSearchQuery = e.target.value;
+    setSearchQuery(newSearchQuery);
+    setPage(1); // Reset page to 1 when search query changes
   };
-  
-  
 
   const handleViewMore = () => {
     setPage(prevPage => prevPage + 1);
   };
-
   return (
     <div className="h-80vh py-8 px-10 ml-10 mt-10 bg-white border-l border-r sm:w-64 w-60 dark:bg-gray-900 dark:border-gray-700">
     <h2 className="px-5 text-lg font-medium text-gray-800 dark:text-white">People</h2>

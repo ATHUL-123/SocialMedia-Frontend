@@ -14,6 +14,7 @@ import AdminLogin from './pages/admin/Login/adminLogin';
 import Dashboard from './pages/admin/Dashboard/Dashboard';
 import OtherProfile from './pages/user/OtherProfile/OtherProfile';
 import Reports from './pages/admin/Reports/Reports';
+import Explore from './pages/user/Explore/Explore';
 
 
 function App() {
@@ -43,6 +44,8 @@ function App() {
             <Route path='/otp' element={<EmailVerificationForm />} />
 
             <Route path='/user/:userId' element={<OtherProfile />} />
+
+            <Route path='/explore' element={<Explore />} />
 
             <Route path='/admin' element={<AdminLogin />} />
             <Route

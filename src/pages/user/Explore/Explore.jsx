@@ -1,38 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../../components/User/Header/Header';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { getPost } from '../../../features/post/postSlice';
-import { useDispatch } from 'react-redux';
-import { logout } from '../../../features/auth/authSlice';
 import PostItem from '../../../components/User/PostList/PostList';
 import PostShimmer from '../../../components/User/Skeltons/PostSkelton';
 import SideProfile from '../../../components/User/SideProfile/SideProfile';
-import './Home.css';
 import UsersList from '../../../components/User/UsersList/UsersList';
-import { getAllFollowesPost } from '../../../services/User/apiMethods';
+import { explorePosts,searchPost } from '../../../services/User/apiMethods';
 
-const Home = () => {
+
+const Explore = () => {
   const [showUserList, setShowUserList] = useState(false);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const pageSize = 5; // Number of posts per page
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setLoading(true);
     getAllPosts();
-  }, [user, page]); // Fetch posts when user changes or page changes
+  }, [user, page]); // Fetch posts when user changes, page changes or search query changes
 
   const getAllPosts = () => {
-    getAllFollowesPost(page, pageSize)
+    explorePosts(page, pageSize, searchQuery)
       .then((response) => {
-        // Filter out duplicate posts
-        console.log(response);
         setPosts([...posts, ...response]);
         setLoading(false);
       })
@@ -46,11 +39,20 @@ const Home = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
+  // Function to handle search query change
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+   
+    searchPost(query).then((response)=>{
+        console.log('res....',response);
+       setPosts(response.data)
+    })
+  };
 
   return (
     <>
       <div>
-        <Header toggleSearch={() => setShowUserList(!showUserList)} />
+        <Header toggleSearch={() => setShowUserList(!showUserList)} onSearch={handleSearch} />
         <div className="w-full bg-indigo-100 h-screen flex flex-col md:flex-row justify-center overflow-hidden">
           <UsersList /> 
           <div className="flex-1 p-5 antialiased overflow-y-auto custom-scrollbar">
@@ -63,12 +65,12 @@ const Home = () => {
             </div>
 
             {loading && (
-  <div className="mt-5 flex flex-col items-center">
-    {[...Array(5)].map((_, index) => (
-      <PostShimmer key={index} />
-    ))}
-  </div>
-)}
+              <div className="mt-5 flex flex-col items-center">
+                {[...Array(5)].map((_, index) => (
+                  <PostShimmer key={index} />
+                ))}
+              </div>
+            )}
               
             {!loading && posts.length > 0 && (
               <div className="flex justify-center mt-4">
@@ -88,4 +90,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Explore;

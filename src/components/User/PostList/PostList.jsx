@@ -116,15 +116,25 @@ const PostList = ({ post }) => {
       src={post.image}
       alt="Post"
     />
-    <div className="bg-white border shadow p-3 text-xl text-gray-700 font-semibold">
-      {post.description}
-  
-      {totalLikes > 3 && (
-        <p style={{ fontSize: 'small' }}>
-          <span style={{ fontWeight: 'bold' }}>{post.likes[0].userName}</span> and {totalLikes - 2} other people liked this post
-        </p>
-      )}
-    </div>
+   <div className="bg-white border shadow p-3 text-xl text-gray-700 font-semibold">
+  {post.description}
+  <div className="flex flex-wrap text-sm bg-white gap-2">
+
+    {post.tags.slice(0, 4).map((tag, index) => (
+      <span
+        key={index}
+        className="inline-block bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-2 py-1 rounded-md"
+      >
+        {tag}
+      </span>
+    ))}
+  </div>
+  {totalLikes > 3 && (
+    <p style={{ fontSize: 'small' }}>
+      <span style={{ fontWeight: 'bold' }}>{post.likes[0].userName}</span> and {totalLikes - 2} other people liked this post
+    </p>
+  )}
+</div>
   
     <div className="bg-white p-1 border shadow flex flex-row flex-wrap rounded-b-lg">
       <div

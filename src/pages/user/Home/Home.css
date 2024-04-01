@@ -1,0 +1,22 @@
+.custom-scrollbar::-webkit-scrollbar {
+    width: 0;  /* Hides the default scrollbar on Webkit browsers */
+}
+
+.custom-scrollbar {
+    scrollbar-width: none;  /* For Firefox */
+    -ms-overflow-style: none;  /* For IE and Edge */
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar {
+    width: auto;  /* Show scrollbar on hover for Webkit browsers */
+}
+
+/* Add your custom scrollbar design here */
+.custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+}

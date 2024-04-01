@@ -9,6 +9,8 @@ const AddPost = ({ onClose }) => {
     const [description, setDescription] = useState('');
     const [imagePreview, setImagePreview] = useState('');
     const [imageFile, setImageFile] = useState(null);
+    const [tags, setTags] = useState([]);
+    const [tagInput, setTagInput] = useState('');
 
     const handleDescriptionChange = (e) => {
         setDescription(e.target.value);
@@ -26,6 +28,22 @@ const AddPost = ({ onClose }) => {
         }
     };
 
+    const handleTagInputChange = (e) => {
+        setTagInput(e.target.value);
+    };
+
+    const handleAddTag = () => {
+        if (tagInput.trim() !== '') {
+            const tagsWithPrefix = `#${tagInput}`
+            setTags([...tags, tagsWithPrefix.trim()]);
+            setTagInput('');
+        }
+    };
+
+    const handleRemoveTag = (tag) => {
+        setTags(tags.filter(t => t !== tag));
+    };
+
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
@@ -34,6 +52,7 @@ const AddPost = ({ onClose }) => {
                     const data = {
                         imageUrl,
                         description,
+                        tags, // Include tags in the data
                         userId: user._id
                     }
                     dispatch(addPost(data))
@@ -68,6 +87,26 @@ const AddPost = ({ onClose }) => {
                                     onChange={handleDescriptionChange}
                                     placeholder="Enter description..."
                                 />
+                            </div>
+
+                            <div className="mt-4">
+                                <input
+                                    type="text"
+                                    className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                                    value={tagInput}
+                                    onChange={handleTagInputChange}
+                                    placeholder="Add tags (comma-separated)"
+                                />
+                                <button type="button" onClick={handleAddTag} className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-md">Add Tag</button>
+                            </div>
+
+                            <div className="mt-2">
+                                {tags.map(tag => (
+                                    <span key={tag} className="inline-block bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-2 py-1 m-1 rounded-md">
+                                        {tag}
+                                        <button type="button" onClick={() => handleRemoveTag(tag)} className="ml-2 focus:outline-none">x</button>
+                                    </span>
+                                ))}
                             </div>
                         </div>
 

@@ -54,9 +54,10 @@ function OtherProfile() {
     <Header />
     <div className="flex">
       {/* Scrollable UsersList */}
-      <div className="w-full md:w-1/4 bg-indigo-100" style={{ maxHeight: '24rem', overflowY: 'auto' }}>
-        <UsersList />
-      </div>
+      <div className="w-full md:w-1/4 h-90vh bg-indigo-100 overflow-y-auto scrollbar-hidden rounded-lg shadow-lg">
+  <UsersList />
+</div>
+
   
       {/* UserProfile and Post section */}
       <div className="flex flex-col flex-grow">
@@ -67,28 +68,27 @@ function OtherProfile() {
           <div className="container px-6 mx-auto">
             <hr className="my-8 border-gray-200 dark:border-gray-700" />
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
-              <div className="p-5 antialiased">
-                {/* Removed md:w-4/5 and replaced with flex-1 */}
-                <div className="mt-3 flex flex-col items-center">
-                  {status ? (
-                    <p>Private Account</p>
-                  ) : postLoading ? (
-                    <p>Loading...</p>
-                  ) : posts.length > 0 ? (
-                    posts.map((post, index) => (
-                      <MyPost key={index} user={user} post={post} />
-                    ))
-                  ) : (
-                    'No Post'
-                  )}
-                </div>
-              </div>
+              {/* Ensuring each post occupies a grid cell */}
+              {status ? (
+                <p>Private Account</p>
+              ) : postLoading ? (
+                <p>Loading...</p>
+              ) : posts.length > 0 ? (
+                posts.map((post, index) => (
+                  <div key={index} className="p-5 antialiased">
+                    <MyPost user={user} post={post} />
+                  </div>
+                ))
+              ) : (
+                'No Post'
+              )}
             </div>
           </div>
         </section>
       </div>
     </div>
   </>
+  
   
   );
 }

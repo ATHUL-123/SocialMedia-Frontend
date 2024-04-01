@@ -1,4 +1,23 @@
-.scroll-container::-webkit-scrollbar {
-    display: none;
-  }
+.scroll-container-wrapper {
+  overflow: hidden; /* Hide any content that overflows */
+}
+
+.scroll-container {
+  max-height: calc(100% - 50px); /* Adjust as needed */
+  overflow-y: hidden; /* Allow vertical scrolling if needed */
   
+}
+
+/* Hide scrollbar for Firefox */
+.scroll-container::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Hide scrollbar for WebKit browsers */
+.scroll-container {
+  scrollbar-width: none;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
