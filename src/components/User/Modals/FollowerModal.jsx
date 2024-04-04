@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { fetchFollowers } from '../../../services/User/apiMethods';
 import ListCard from '../ListCard/ListCard';
+import { useSelector } from 'react-redux';
 import './FollowerModal.css'
 function FollowerList({ isOpen, toggleModal }) {
   const modalRoot = document.getElementById('portal-root');
@@ -11,7 +12,8 @@ function FollowerList({ isOpen, toggleModal }) {
   const [totalUsers, setTotalUsers] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const usersPerPage = 5;
-
+  const {user} = useSelector((state)=>state.auth)
+  const userId = user._id;
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -81,7 +83,7 @@ function FollowerList({ isOpen, toggleModal }) {
               <div className="max-h-60 overflow-y-auto hide-scrollbar">
   <ul className="text-gray-500 dark:text-gray-400 text-left">
     {users.map(user => (
-      <ListCard hideButton={true} key={user.id} user={user} />
+      <ListCard hideButton={true} key={user.id} user={user} userId={userId} />
     ))}
   </ul>
 </div>

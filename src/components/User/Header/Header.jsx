@@ -66,8 +66,8 @@ const Header = ({ toggleSearch, onSearch }) => {
             <button className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
               <Link to="/profile"><FaUser className="text-white" /></Link>
             </button>
-            <a href="/chat" className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
-              <FaComments className="text-white" />
+            <a  className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
+            <Link to="/chat"><FaComments className="text-white" /></Link>
             </a>
            <button onClick={toggleSearch} className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
            <Link to="/explore">    <FaSearch className="text-white" /></Link>

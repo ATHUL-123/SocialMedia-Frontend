@@ -8,7 +8,9 @@ import SettingsModal from '../Modals/SettingsModal';
 import FollowerList from '../Modals/FollowerModal';
 import RequestModal from '../Modals/RequestModal';
 import { VscVerifiedFilled } from "react-icons/vsc";
+
 import AddVerifiedModal from '../Razorpay/VerifyModal';
+import RemoveConfirm from '../Modals/RemoveVerify';
 
 
 function ProfileCard({user,posts}) {
@@ -22,6 +24,7 @@ function ProfileCard({user,posts}) {
     const [followersModal,setFollowersModal] = useState(false)
     const [request,setRequest]=useState(false)
     const [VerifyModal,setVerifyModal] =useState(false)
+    const [removeVerify, setRemoveVerify] = useState(false);
      
     const toggleDropdown = () => {
       setIsOpen(!isOpen);
@@ -36,6 +39,15 @@ function ProfileCard({user,posts}) {
           navigate('/login')
        
     }
+
+    const handleOpenRemoveModal = () => {
+      setRemoveVerify(true);
+    };
+  
+    const handleCloseRemoveModal = () => {
+      setRemoveVerify(false);
+    };
+  
     
  
     if (!user) {
@@ -44,7 +56,7 @@ function ProfileCard({user,posts}) {
   
   return (
     <>
-  
+    {removeVerify && <RemoveConfirm isOpen={removeVerify} onClose={handleCloseRemoveModal} />}
  {followersModal && <FollowerList  isOpen={followersModal} toggleModal={()=>setFollowersModal(!followersModal)}/>}    
  {followingModal && <FollowingList  isOpen={followingModal} toggleModal={()=>setFollowingModal(!followingModal)} /> } 
  {VerifyModal && <AddVerifiedModal isOpen={VerifyModal} closeModal={()=>setVerifyModal(false)} user={user}/>}
@@ -147,11 +159,20 @@ function ProfileCard({user,posts}) {
               >
                 Settings
               </a>
-              {!user.verified && (
-  <a onClick={()=>setVerifyModal(true)} className="inline-block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100" style={{ display: 'flex', alignItems: 'center' }}>
+              {!user.verified ? (
+  <a onClick={() => setVerifyModal(true)} className="inline-block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100" style={{ display: 'flex', alignItems: 'center' }}>
     Get Verified <span style={{ marginLeft: '5px' }}><VscVerifiedFilled /></span>
   </a>
+) : (
+  <a
+  onClick={handleOpenRemoveModal}
+  className="inline-block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100"
+  style={{ display: 'flex', alignItems: 'center' }}
+>
+  Remove verification<span style={{ marginLeft: '5px' }}><VscVerifiedFilled /></span>
+</a>
 )}
+
 
 
 

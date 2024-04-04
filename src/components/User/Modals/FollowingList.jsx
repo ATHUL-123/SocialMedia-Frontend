@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { fetchFollowing } from '../../../services/User/apiMethods';
 import ListCard from '../ListCard/ListCard';
+import { useSelector } from 'react-redux';
 import './FollowingList.css'
 function FollowingList({ isOpen, toggleModal }) {
   const modalRoot = document.getElementById('portal-root');
@@ -11,7 +12,8 @@ function FollowingList({ isOpen, toggleModal }) {
   const [totalUsers, setTotalUsers] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const usersPerPage = 5;
-
+  const {user} = useSelector((state)=>state.auth)
+  const userId = user._id;
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -81,7 +83,7 @@ function FollowingList({ isOpen, toggleModal }) {
               <div className="max-h-60 overflow-y-auto hide-scrollbar">
   <ul className="text-gray-500 dark:text-gray-400 text-left">
     {users.map(user => (
-      <ListCard key={user.id} user={user} />
+      <ListCard key={user.id} user={user} userId={userId} />
     ))}
   </ul>
 </div>
@@ -102,7 +104,7 @@ function FollowingList({ isOpen, toggleModal }) {
               )}
             </div>
           </div>
-
+        
           <div className="mt-4 sm:flex sm:items-center sm:justify-between sm:mt-6 sm:-mx-2">
             <button
               onClick={toggleModal}

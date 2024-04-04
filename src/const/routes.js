@@ -1,3 +1,4 @@
+
 import { followUsers } from "../services/User/apiMethods";
 
 export const postUrl = {
@@ -41,7 +42,7 @@ export const postUrl = {
   export const authUrl = {
     // authUser: "/auth/user",
     // authAdmin: "/auth/admin",
-
+    
     sendOtp: "/api/users/send-otp",
     verifyOtp: "/api/users/verify-otp",
     
@@ -75,6 +76,14 @@ export const userUrl ={
   acceptRequest:(userId)=>`/api/users/accept-request/${userId}`,  
   rejectRequest:(userId)=>`/api/users/reject-request/${userId}`,
   payment :`/api/users/payment/create`,
-  paymentSuccess:`/api/users/payment/success`
+  paymentSuccess:`/api/users/payment/success`,
+  removeVerification:`/api/users/remove-verify`
   
+}
+
+export const chatUrl ={
+  getAllConversation :"/api/chats/conversation",
+  getAllMessages     :(converSationId)=>`/api/chats/message/${converSationId}`,
+  addMessage         :'/api/chats/message',
+  addConversation    :'/api/chats/conversation'
 }

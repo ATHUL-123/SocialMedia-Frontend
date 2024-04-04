@@ -1,5 +1,5 @@
 import { apiCall } from "./apiCalls";
-import { postUrl,authUrl,userUrl } from "../../const/routes";
+import { postUrl,authUrl,userUrl, chatUrl } from "../../const/routes";
 
 
 
@@ -477,6 +477,88 @@ export const explorePosts = (page,pageSize)=>{
   return new Promise ((resolve,reject)=>{
     try {
       apiCall('get',postUrl.explorePosts(page,pageSize))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+
+export const getAllConversations =()=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',chatUrl.getAllConversation)
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const getAllMessages =(conversationId)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',chatUrl.getAllMessages(conversationId))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const sendNewMessage =(data)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('post',chatUrl.addMessage,data)
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const addNewConversation =(data)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('post',chatUrl.addConversation,data)
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+
+export const removeVerification=()=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('patch',userUrl.removeVerification)
       .then((response)=>{
         resolve(response);
       })

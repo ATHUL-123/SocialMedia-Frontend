@@ -15,6 +15,7 @@ import Dashboard from './pages/admin/Dashboard/Dashboard';
 import OtherProfile from './pages/user/OtherProfile/OtherProfile';
 import Reports from './pages/admin/Reports/Reports';
 import Explore from './pages/user/Explore/Explore';
+import Chat from './pages/user/Messenger/Messenger';
 
 
 function App() {
@@ -46,6 +47,8 @@ function App() {
             <Route path='/user/:userId' element={<OtherProfile />} />
 
             <Route path='/explore' element={<Explore />} />
+
+            <Route  path='/chat' element={<Chat />} />
 
             <Route path='/admin' element={<AdminLogin />} />
             <Route

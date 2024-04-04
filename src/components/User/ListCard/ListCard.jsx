@@ -1,8 +1,10 @@
 import React,{useState} from 'react'
-import { unFollowUsers,followUsers } from '../../../services/User/apiMethods'
+import { unFollowUsers,followUsers,addNewConversation } from '../../../services/User/apiMethods'
 import { useNavigate } from 'react-router-dom';
+import { FaComments } from 'react-icons/fa';
 
-function ListCard({user,hideButton}) {
+
+function ListCard({user,hideButton,userId}) {
     
     const navigate = useNavigate()
     const [remove,setRemove] = useState(false);
@@ -14,6 +16,23 @@ function ListCard({user,hideButton}) {
         }).catch((error)=>{
           console.log(error);
         })
+    }
+
+    const handleConversation =()=>{
+      const data = {
+        members:[user._id,userId]
+      }
+      addNewConversation(data).then((response)=>{
+      
+        navigate('/chat', {
+          state: {
+              conversation:response.data// This will be accessible in the location.state property in the 'chat' component
+          }
+      })
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
     }
 
     const handleUndo =()=>{
@@ -44,6 +63,7 @@ function ListCard({user,hideButton}) {
       </svg>
     }
     </div>
+    <FaComments className="ml-2 cursor-pointer" onClick={handleConversation}  />
     {hideButton ? null : (
   remove ? (
     <button onClick={handleUndo} className="px-3 py-1 text-sm font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
