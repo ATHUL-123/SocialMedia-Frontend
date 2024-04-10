@@ -4,7 +4,7 @@ import { startPayment ,paymentSuccess } from '../../../services/User/apiMethods'
 import { useDispatch } from 'react-redux';
 import { changeVerify } from '../../../features/auth/authSlice';
 
-function AddVerifiedModal({ isOpen, closeModal,user }) {
+function AddVerifiedModal({ isOpen, closeModal,user,notifyClose }) {
     const dispatch =useDispatch()
     function loadScript(src) {
     return new Promise((resolve) => {
@@ -58,6 +58,7 @@ async function displayRazorpay() {
             const result = await paymentSuccess(data)
             
             dispatch(changeVerify(true))
+            notifyClose()
         },
         prefill: {
             name:user.userName,

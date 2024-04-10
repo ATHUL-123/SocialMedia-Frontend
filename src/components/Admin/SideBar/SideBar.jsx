@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
     return (
@@ -27,7 +28,7 @@ const Sidebar = () => {
                         <span className="mx-4 font-medium">Dashboard</span>
                     </a>
 
-                    <a className="flex mt-5 items-center px-4 py-2 text-gray-700  bg-gray-100  rounded-md dark:bg-gray-800 dark:text-gray-200" href="#">
+                    <Link to="/admin/dashboard" className="flex mt-5 items-center px-4 py-2 text-gray-700 rounded-md dark:bg-gray-800 dark:text-gray-200">
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 
                             <path d="M16 14.9394C17.6569 13.2825 18.6667 11.1206 18.6667 8.83333C18.6667 5.92706 16.3729 3.66667 13.5 3.66667C10.6271 3.66667 8.33333 5.92706 8.33333 8.83333C8.33333 11.1206 9.34315 13.2825 11 14.9394" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -35,23 +36,23 @@ const Sidebar = () => {
                         </svg>
 
                         <span className="mx-4 font-medium">Users</span>
-                    </a>
+                        </Link>
 
-                    <a className="flex mt-5 items-center px-4 py-2 text-gray-700 rounded-md dark:bg-gray-800 dark:text-gray-200" href="#">
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M19 11H5M19 11C20.1046 11 21 11.8954 21 13V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V13C3 11.8954 3.89543 11 5 11M19 11V9C19 7.89543 18.1046 7 17 7M5 11V9C5 7.89543 5.89543 7 7 7M7 7V5C7 3.89543 7.89543 3 9 3H15C16.1046 3 17 3.89543 17 5V7M7 7H17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                        <Link to="/admin/kyc" className="flex mt-5 items-center px-4 py-2 text-gray-700 rounded-md dark:bg-gray-800 dark:text-gray-200">
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 11H5M19 11C20.1046 11 21 11.8954 21 13V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V13C3 11.8954 3.89543 11 5 11M19 11V9C19 7.89543 18.1046 7 17 7M5 11V9C5 7.89543 5.89543 7 7 7M7 7V5C7 3.89543 7.89543 3 9 3H15C16.1046 3 17 3.89543 17 5V7M7 7H17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+    <span className="mx-4 font-medium">Kyc Verifications</span>
+</Link>
+                   
 
-                        <span className="mx-4 font-medium">Posts</span>
-                    </a>
-                    
-                    <a className="flex mt-5 items-center px-4 py-2 text-gray-700 rounded-md dark:bg-gray-800 dark:text-gray-200" href="#">
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M19 11H5M19 11C20.1046 11 21 11.8954 21 13V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V13C3 11.8954 3.89543 11 5 11M19 11V9C19 7.89543 18.1046 7 17 7M5 11V9C5 7.89543 5.89543 7 7 7M7 7V5C7 3.89543 7.89543 3 9 3H15C16.1046 3 17 3.89543 17 5V7M7 7H17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+<Link to="/admin/reports" className="flex mt-5 items-center px-4 py-2 text-gray-700 rounded-md dark:bg-gray-800 dark:text-gray-200">
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 11H5M19 11C20.1046 11 21 11.8954 21 13V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V13C3 11.8954 3.89543 11 5 11M19 11V9C19 7.89543 18.1046 7 17 7M5 11V9C5 7.89543 5.89543 7 7 7M7 7V5C7 3.89543 7.89543 3 9 3H15C16.1046 3 17 3.89543 17 5V7M7 7H17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+    <span className="mx-4 font-medium">Reports</span>
+</Link>
 
-                        <span className="mx-4 font-medium">Reports</span>
-                    </a>
 
                     {/* Other navigation links */}
 

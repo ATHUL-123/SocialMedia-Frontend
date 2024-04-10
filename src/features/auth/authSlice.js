@@ -78,6 +78,10 @@ export const authSlice = createSlice({
         changeVerify:(state,action)=>{
           state.user.verified = action.payload
           localStorage.setItem('user',JSON.stringify(state.user))
+        },
+        changeOnline:(state,action)=>{
+          state.user.online = action.payload
+          localStorage.setItem('user',JSON.stringify(state.user))
         }
     },
     extraReducers:(builder)=>{
@@ -117,5 +121,5 @@ export const authSlice = createSlice({
 })
 
 
-export const {reset ,setReduxUser,setUser,changePrivacy,logout,changeVerify} = authSlice.actions
+export const {reset ,setReduxUser,setUser,changePrivacy,logout,changeVerify,changeOnline} = authSlice.actions
 export default authSlice.reducer

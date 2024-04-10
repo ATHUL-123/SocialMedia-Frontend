@@ -570,3 +570,184 @@ export const removeVerification=()=>{
     }
   })
 }
+
+export const getCommentCount=(postId)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',postUrl.getCommentCount(postId))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+
+export const getAllNotifications =()=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',userUrl.getAllNotifications)
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const isFollowing =(userId)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',userUrl.isFollowing(userId))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const searchAll =(searchQuery)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',userUrl.searchAll(searchQuery))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const savePost =(postId)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('post',postUrl.savePost(postId))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const fetchSaved =()=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',postUrl.fetchSaved)
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const removeSaved =(savedId)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('delete',postUrl.removeSaved(savedId))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+
+export const submitKyc=(data)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('post',userUrl.submitKyc,data)
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+
+export const isKycSubmitted=()=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',userUrl.isKycSubmitted)
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+
+export const messageReaded=(convId,readerId)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('patch',chatUrl.messageReaded(convId,readerId))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+
+export const deleteMessage=(messageId,type)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('patch',chatUrl.deleteMessage(messageId,type))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

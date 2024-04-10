@@ -93,3 +93,60 @@ export const takeAction =(targetId)=>{
         }
      })
 }
+
+export const fetchAllKyc =()=>{
+
+   
+     return new Promise((resolve,reject)=>{
+        try {
+            apiCall('get',adminUrl.fetchAllKyc)
+            .then((response) => {
+                resolve(response);
+            })
+            .catch((error) => {
+                console.log(error);
+                reject(error); 
+            });
+        } catch (error) {
+            reject(error)
+        }
+     })
+}
+
+export const rejectKyc=(message,kycId)=>{
+
+   
+    return new Promise((resolve,reject)=>{
+       try {
+           apiCall('delete',adminUrl.rejectKyc(kycId,message))
+           .then((response) => {
+               resolve(response);
+           })
+           .catch((error) => {
+               console.log(error);
+               reject(error); 
+           });
+       } catch (error) {
+           reject(error)
+       }
+    })
+}
+
+export const acceptKyc=(kycId)=>{
+
+   
+    return new Promise((resolve,reject)=>{
+       try {
+           apiCall('patch',adminUrl.acceptKyc(kycId))
+           .then((response) => {
+               resolve(response);
+           })
+           .catch((error) => {
+               console.log(error);
+               reject(error); 
+           });
+       } catch (error) {
+           reject(error)
+       }
+    })
+}

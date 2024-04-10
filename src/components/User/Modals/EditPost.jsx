@@ -108,7 +108,7 @@ function EditPost({ isOpen, onClose, post }) {
             <div className="fixed inset-0 z-20 flex items-center justify-center">
                 <div className="relative inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl dark:bg-gray-900 sm:my-8 sm:w-full sm:max-w-sm sm:p-6 sm:align-middle">
                     <h3 className="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
-                        Invite your team
+                        Edit Post
                     </h3>
                     <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                         Your new project has been created. Invite your
@@ -161,9 +161,10 @@ function EditPost({ isOpen, onClose, post }) {
                                 accept="image/*"
                                 className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                             />
-                            {imagePreview && (
-                                <img src={imagePreview} alt="Preview" className="mt-2 w-full" />
-                            )}
+                           {imagePreview && (
+    <img src={imagePreview} alt="Preview" className="mt-2 w-full h-64 object-cover" />
+)}
+
                         </div>
 
                         {/* Buttons */}

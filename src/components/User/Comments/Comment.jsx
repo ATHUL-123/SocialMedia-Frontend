@@ -5,8 +5,8 @@ import { FaTrashAlt, FaReply } from 'react-icons/fa'; // Import the reply icon
 import moment from 'moment';
 import './Comment.css';
 
-const CommentModal = ({ isOpen, onClose, post }) => {
-  const [comments, setComments] = useState([]); // State to store comments
+const   CommentModal = ({ isOpen, onClose, post }) => {
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState(''); // State to store new comment
   const [replyTo, setReplyTo] = useState(null); // State to store the comment ID to which the user is replying
   const { user } = useSelector((state) => state.auth);
@@ -14,15 +14,16 @@ const CommentModal = ({ isOpen, onClose, post }) => {
   const [replies,setReplies] = useState([])
   const [add,setAdd] = useState(false)
 
+
   // Function to retrieve comments when the component mounts or when the comments state changes
   useEffect(() => {
     getAllComments(post._id)
       .then((response) => {
-       
+    
         setComments(response.comments);
       })
       .catch((error) => console.error(error));
-  }, [post._id,add]);
+  }, [post._id,add,comments]);
 
   // Function to handle change in the new comment input field
   const handleNewCommentChange = (e) => {
@@ -85,33 +86,42 @@ const CommentModal = ({ isOpen, onClose, post }) => {
     onClose(); // Call the onClose function passed from the parent component
   };
 
-  // Function to handle deleting a comment
   const handleDeleteComment = (commentId) => {
     deleteComment(commentId)
       .then(() => {
         // Filter out the deleted comment from the comments state
         const updatedComments = comments.filter((comment) => comment._id !== commentId);
         setComments(updatedComments);
+  
+        // Filter out the deleted comment from the replies state
+        const updatedReplies = replies.filter((reply) => reply._id !== commentId);
+        setReplies(updatedReplies);
       })
       .catch((error) => console.error(error));
   };
+  
 
-  const handleShowReplies = (commentId)=>{
-    if(showReply){
-      setShowReply(false);
-    }else{
+  const handleShowReplies = (commentId) => {
+    // Toggle the visibility of comments based on the current state
+  
+      setShowReply(prevState => ({
+        ...prevState,
+        [commentId]: !prevState[commentId]
+      }));
+  
+  
+    // If the comments are currently hidden, fetch and display them
+    if (!showReply[commentId]) {
       fetchReplies(commentId)
-      .then((response)=>{
-        console.log(response);
-        setShowReply(true);
-        setReplies(response.replies)
-      })
-      .catch((error)=>{
-        console.log(error);
-      })
+        .then((response) => {
+          setReplies(response.replies);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-    
-  }
+  };
+  
 
   return (
     <>
@@ -149,9 +159,9 @@ const CommentModal = ({ isOpen, onClose, post }) => {
                   </svg>}</div>
               </div>
               <div className="overflow-y-auto max-h-96">
-                {comments.length > 0 ? comments.map((comment, index) => (
+                {comments.length > 0? comments.map((comment, index) => (
                  <>
-                  <div key={index} className="comment py-2">
+                  <div key={index} className="comment py-5">
                     <div className="profile-info">
                       <div className="profile-picture">
                         <img
@@ -173,37 +183,44 @@ const CommentModal = ({ isOpen, onClose, post }) => {
                         </div>
                       )}
                     </div>
-                    <div className="reply-button" onClick={() => handleReply(comment._id, comment.userName)}>
-                      <FaReply className="reply-icon" /> {/* Reply icon */}
-                    </div>
+                   
                    
                   
                   </div>
                    <div>
-                      <p className='time-ago py-0'>Posted {moment(comment.createdAt).fromNow()}</p>
-                      <p className='cursor-pointer' onClick={()=>handleShowReplies(comment._id)}>{`show ${comment.repliesCount} replies`}</p>
+                   <p className='time-ago py-0' style={{ display: 'inline-block' }}>Posted {moment(comment.createdAt).fromNow()}</p><p className='cursor-pointer' onClick={() => handleReply(comment._id, comment.userName)} style={{ display: 'inline-block', marginLeft: '30px' }}>Reply</p>
+                   {comment.repliesCount>0 && <p className='cursor-pointer' onClick={()=>handleShowReplies(comment._id)}>{`show ${comment.repliesCount} replies`}</p>}  
                     </div>
                     {/* Loop through replies */}
-                    {showReply && replies.map((reply, idx) => (
-  <div key={idx} className="reply py-2">
+                    {showReply[comment._id] && replies.map((reply, idx) => (
+  <div key={idx} className="reply py-2" style={{ marginLeft: '100px' }}>
     {/* Render profile picture and username here */}
     <div className="profile-info">
       <div className="profile-picture">
         <img
           src={reply.userId.profilePic}
           alt="Profile"
-          style={{ width: '30px', height: '30px', borderRadius: '50%' }}
+          style={{ width: '20px', height: '20px', borderRadius: '50%' }}
         />
       </div>
-      <div className="username" style={{ fontWeight: 'bold', marginLeft: '10px' }}>
+      <div className="username" style={{ fontWeight: 'bold', marginLeft: '5px', fontSize: '14px' }}>
         {reply.userName}
       </div>
+      <div className="action-buttons" style={{ marginLeft: 'auto' }}> {/* Move the delete button to the right */}
+        {user.userName === reply.userName && (
+          <div>
+            <FaTrashAlt className="delete-icon" onClick={() => handleDeleteComment(reply._id)} /> {/* Delete icon */}
+          </div>
+        )}
+      </div>
     </div>
+
     {/* Render reply content here */}
     <div>{reply.content}</div>
     {/* Add any other reply information here */}
   </div>
 ))}
+
 
                    </>
                 )) : <p>No comments</p>}

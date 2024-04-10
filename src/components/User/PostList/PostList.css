@@ -3,3 +3,34 @@
     margin-bottom: 20px; /* Add margin to space out the cards */
     margin-top: 20px;
   }
+  .relative {
+    position: relative;
+  }
+  
+  .tag-trigger {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 10px;
+    height: 10px;
+    background-color: #ccc;
+    border-radius: 50%;
+  }
+  
+  .tag-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 0.25rem;
+    display: none;
+  }
+  
+  .tag-trigger:hover + .tag-container,
+  .tag-container:hover {
+    display: block;
+  }
+  
+  

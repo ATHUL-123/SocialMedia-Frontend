@@ -32,9 +32,15 @@ export const postUrl = {
     reportPost: (postId) => `/api/posts/report-post/${postId}`,
   
         getAllFollowersPost :(page,pageSize)=>`/api/posts/allfollowingsPost?page=${page}&pageSize=${pageSize}`,
-        getUserPost :(userId) => `/api/posts/getuserpost/${userId}`
+        getUserPost :(userId) => `/api/posts/getuserpost/${userId}`,
 //     //toget evry posts 20 per req.
 //     getAll: `/post/get-every-posts`,
+
+ getCommentCount : (postId) =>`/api/posts/commentCount/${postId}`,
+
+ savePost :(postId)=>`/api/posts/savePost/${postId}`,
+ fetchSaved:`/api/posts/savePost`,
+ removeSaved:(savedId)=>`/api/posts/savePost/${savedId}`
   };
 
 
@@ -57,7 +63,11 @@ export const adminUrl ={
 
   getAllReports:(page,usersPerPage)=>`/api/admin/get-reports?page=${page}&limit=${usersPerPage}`,
 
-  takeAction:(targetId)=>`/api/admin/take-action?targetId=${targetId}`
+  takeAction:(targetId)=>`/api/admin/take-action?targetId=${targetId}`,
+
+  fetchAllKyc:`/api/admin/fetch-kyc`,
+  rejectKyc:(kycId,message)=>`/api/admin/reject-kyc/${kycId}/${message}`,
+  acceptKyc:(kycId)=>`/api/admin/accept-kyc/${kycId}`
   
 }
 
@@ -77,13 +87,22 @@ export const userUrl ={
   rejectRequest:(userId)=>`/api/users/reject-request/${userId}`,
   payment :`/api/users/payment/create`,
   paymentSuccess:`/api/users/payment/success`,
-  removeVerification:`/api/users/remove-verify`
+  removeVerification:`/api/users/remove-verify`,
+  getAllNotifications:`/api/users/notifications`,
+  isFollowing:(userId)=>`/api/users/isFollowing/${userId}`,
+  searchAll:(searchQuery)=>`/api/users/searchallusers?searchQuery=${searchQuery}`,
   
+
+  //kyc for authentication
+  submitKyc :`/api/users/kyc`,
+  isKycSubmitted :`/api/users/isKyc`
 }
 
 export const chatUrl ={
   getAllConversation :"/api/chats/conversation",
   getAllMessages     :(converSationId)=>`/api/chats/message/${converSationId}`,
   addMessage         :'/api/chats/message',
-  addConversation    :'/api/chats/conversation'
+  addConversation    :'/api/chats/conversation',
+  messageReaded :(convId,readerId)=>`/api/chats/message/read/${convId}/${readerId}`,
+  deleteMessage :(messageId,type) =>`/api/chats/message/delete/${messageId}/${type}`
 }

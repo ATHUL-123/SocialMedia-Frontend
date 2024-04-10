@@ -1,17 +1,20 @@
 // PostList.js
 import React, { useEffect, useState } from 'react';
-import { LikePost, unLikePost } from '../../../services/User/apiMethods';
+import { LikePost, unLikePost,savePost } from '../../../services/User/apiMethods';
 import { format } from 'date-fns';
 import DropdownMenu from './DropDown'; // Import the DropdownMenu component
 import CommentModal from '../Comments/Comment';
 import './PostList.css';
 import { FaThumbsUp, FaCommentAlt, FaShare } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const PostList = ({ post }) => {
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [totalLikes, setTotalLikes] = useState(post.likes.length);
   const [dropDown, setDropDown] = useState(false);
   const [openComment,setOpenComment] = useState(false)
+  const [saved,setSaved]=useState(post.isSaved)
+  const navigate =useNavigate()
 
   const toggleDropdown = () => {
     setDropDown(!dropDown);
@@ -46,6 +49,31 @@ const PostList = ({ post }) => {
         console.log(error);
       });
   };
+
+  const handlSavePost =(postId)=>{
+     savePost(postId)
+       .then((response)=>{
+        console.log(response);
+        setSaved(true)
+       })
+       .catch((error)=>{
+        console.log(error);
+       })
+  }
+
+  const [showTaggedUsers, setShowTaggedUsers] = useState(false);
+
+  const handleMouseEnter = () => {
+    setShowTaggedUsers(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowTaggedUsers(false);
+  };
+
+  const handleNavigate=(userId)=>{
+    navigate(`/user/${userId}`)
+  }
 
   const formattedDate = format(new Date(post.date), 'MMMM dd, yyyy');
 
@@ -111,11 +139,32 @@ const PostList = ({ post }) => {
 </div>
 
 
-    <img
-      className="border rounded-t-lg shadow-lg w-full"
-      src={post.image}
-      alt="Post"
-    />
+<div className="relative">
+  <img
+    className="border rounded-t-lg shadow-lg w-full"
+    src={post.image}
+    alt="Post"
+    onMouseEnter={handleMouseEnter}
+    onMouseLeave={handleMouseLeave}
+  />
+  <div className="tag-trigger" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}></div>
+  {showTaggedUsers && post.taggedUsers && post.taggedUsers.length > 0 && (
+    <div 
+      className="absolute top-0 left-0 p-2 bg-gray-900 text-white rounded tag-container"
+      onMouseEnter={handleMouseEnter} 
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Assuming post.taggedUsers is an array of usernames */}
+      {post.taggedUsers.map((user, index) => (
+        <span onClick={()=>handleNavigate(user._id)} key={index} className="mr-2 cursor-pointer">
+          {user.userName}
+        </span>
+      ))}
+    </div>
+  )}
+</div>
+
+
    <div className="bg-white border shadow p-3 text-xl text-gray-700 font-semibold">
   {post.description}
   <div className="flex flex-wrap text-sm bg-white gap-2">
@@ -150,9 +199,9 @@ const PostList = ({ post }) => {
       <div
         className="w-1/3 hover:bg-gray-100 border-l-4 border-r flex items-center justify-center text-lg text-gray-700 font-semibold cursor-pointer transition-colors duration-300 ease-in-out"
       >
-        <span className="inline-flex items-center">
+        <span onClick={()=>handlSavePost(post._id)} className="inline-flex items-center">
           <FaShare className="mr-1" />
-          <span>Save</span>
+          <span>{saved ?'Unsave' : 'Save'}</span>
         </span>
       </div>
       <div

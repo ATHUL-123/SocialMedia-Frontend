@@ -1,14 +1,37 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { format } from 'date-fns';
 import { AiFillHeart, AiOutlineComment, AiFillEdit, AiOutlineDelete } from 'react-icons/ai';
+import CommentModal from '../Comments/Comment';
 import EditPost from '../Modals/EditPost';
+import { getCommentCount } from '../../../services/User/apiMethods';
+
 
 
 import DeleteConfirm from '../Modals/DeleteConfirm';
 
 
+
 function MyPost({ post }) {
   const [isEditPost, setIsEditPost] = useState(false);
+  const [showComments,setShowComments] = useState(false)
+  const [commentCount,setCommentCount] = useState(0)
+  const [likeCount,setLikeCount]       = useState(0) 
+ 
+
+  useEffect(()=>{
+getCommentCount(post._id)
+   .then((response)=>{
+    
+    console.log('ressss',response);
+    setCommentCount(response.commentCount)
+    setLikeCount(response.likeCount)
+
+   })
+   .catch((error)=>{
+    console.log(error);
+   })
+  },[])
+
   
   const toggleEditModal =()=>{
     setIsEditPost(!isEditPost)
@@ -26,11 +49,17 @@ function MyPost({ post }) {
     setOpenConfirm(!openConfirm);
   };
 
+  const toggleComment =()=>{
+   
+    setShowComments(!showComments)
+  }
+
 
   return (
     <>
     <div>
-      <img className="object-cover object-center w-full h-64 rounded-lg lg:h-80" src={post.image} alt="" />
+      {showComments && <CommentModal isOpen={showComments} onClose={toggleComment} post={post}/> }
+      <img className="object-cover object-center w-full h-64 rounded-lg lg:h-80" src={post.image} alt=""/>
       <div className="mt-8">
         <span className="text-blue-500 uppercase">{post.userId.userName}</span>
         <h1 className="mt-4 text-xl font-semibold text-gray-800 dark:text-white">{post.title}</h1>
@@ -43,9 +72,11 @@ function MyPost({ post }) {
           <div className="flex items-center space-x-4">
             <div className="relative flex items-center space-x-1">
               <AiFillHeart className="h-6 w-6 text-gray-400 cursor-pointer" />
-              <span className="text-gray-400">10</span>
-              <AiOutlineComment className="h-6 w-6 text-gray-400 cursor-pointer" />
-              <span className="text-gray-400">20</span>
+              <span className="text-gray-400">{likeCount}</span>
+              <div onClick={toggleComment}>
+              <AiOutlineComment  className="h-6 w-6 text-gray-400 cursor-pointer" />
+              </div>
+              <span className="text-gray-400">{commentCount}</span>
             </div>
             <div className="relative">
             <div className="relative inline-block">

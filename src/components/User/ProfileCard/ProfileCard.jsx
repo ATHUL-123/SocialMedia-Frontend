@@ -8,7 +8,7 @@ import SettingsModal from '../Modals/SettingsModal';
 import FollowerList from '../Modals/FollowerModal';
 import RequestModal from '../Modals/RequestModal';
 import { VscVerifiedFilled } from "react-icons/vsc";
-
+import KYCForm from '../Razorpay/KycForm';
 import AddVerifiedModal from '../Razorpay/VerifyModal';
 import RemoveConfirm from '../Modals/RemoveVerify';
 
@@ -25,6 +25,7 @@ function ProfileCard({user,posts}) {
     const [request,setRequest]=useState(false)
     const [VerifyModal,setVerifyModal] =useState(false)
     const [removeVerify, setRemoveVerify] = useState(false);
+    const [openKyc,setOpenKyc]= useState(false)
      
     const toggleDropdown = () => {
       setIsOpen(!isOpen);
@@ -56,6 +57,7 @@ function ProfileCard({user,posts}) {
   
   return (
     <>
+   {openKyc && <KYCForm onClose={()=>setOpenKyc(false)}/> } 
     {removeVerify && <RemoveConfirm isOpen={removeVerify} onClose={handleCloseRemoveModal} />}
  {followersModal && <FollowerList  isOpen={followersModal} toggleModal={()=>setFollowersModal(!followersModal)}/>}    
  {followingModal && <FollowingList  isOpen={followingModal} toggleModal={()=>setFollowingModal(!followingModal)} /> } 
@@ -160,7 +162,7 @@ function ProfileCard({user,posts}) {
                 Settings
               </a>
               {!user.verified ? (
-  <a onClick={() => setVerifyModal(true)} className="inline-block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100" style={{ display: 'flex', alignItems: 'center' }}>
+  <a onClick={() => setOpenKyc(true)} className="inline-block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform hover:bg-gray-100" style={{ display: 'flex', alignItems: 'center' }}>
     Get Verified <span style={{ marginLeft: '5px' }}><VscVerifiedFilled /></span>
   </a>
 ) : (

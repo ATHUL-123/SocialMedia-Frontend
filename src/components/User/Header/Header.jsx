@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { FaPlus, FaBell, FaUser, FaComments, FaSearch } from 'react-icons/fa';
 import AddPost from '../AddPost/AddPost';
 import { Link,useLocation} from 'react-router-dom';
-
+import NotificationModal from '../Modals/NotificationModal';
 
 const Header = ({ toggleSearch, onSearch }) => {
   const location = useLocation()
   const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [showNotification,setShowNotification] = useState(false)
 
   const handleSearch = (e) => {
 
@@ -18,6 +19,10 @@ const Header = ({ toggleSearch, onSearch }) => {
   const handleToggleModal = () => {
     setShowModal(!showModal);
   };
+
+  const toggleNotification =()=>{
+    setShowNotification(!showNotification)
+  }
 
   const isExploreRoute = location.pathname === '/explore'
 
@@ -60,7 +65,7 @@ const Header = ({ toggleSearch, onSearch }) => {
             <button onClick={handleToggleModal} className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
               <FaPlus className="text-white" />
             </button>
-            <a href="/notifications" className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
+            <a onClick={toggleNotification} className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
               <FaBell className="text-white" />
             </a>
             <button className="flex items-center justify-center w-10 h-10 mx-20 rounded-full bg-blue-600 hover:bg-blue-500 focus:outline-none focus:bg-blue-500 transition-colors duration-300">
@@ -75,6 +80,7 @@ const Header = ({ toggleSearch, onSearch }) => {
           </div>
         </div>
       </div>
+      {showNotification && <NotificationModal isOpen={showNotification} closeModal={toggleNotification} />}
       {showModal && <AddPost onClose={handleToggleModal} />}
     </nav>
   );
