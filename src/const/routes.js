@@ -1,5 +1,5 @@
 
-import { followUsers } from "../services/User/apiMethods";
+import { fetchTaggedPost, followUsers } from "../services/User/apiMethods";
 
 export const postUrl = {
     // create: "/post/create-post",
@@ -40,7 +40,9 @@ export const postUrl = {
 
  savePost :(postId)=>`/api/posts/savePost/${postId}`,
  fetchSaved:`/api/posts/savePost`,
- removeSaved:(savedId)=>`/api/posts/savePost/${savedId}`
+ removeSaved:(savedId)=>`/api/posts/savePost/${savedId}`,
+ fetchTaggedPost:(userId)=>`/api/posts/fetch-tagged/${userId}`,
+ fetchLiked:(postId)=>`/api/posts/fetch-liked/${postId}`
   };
 
 

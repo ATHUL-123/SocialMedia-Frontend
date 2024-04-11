@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { getSingleUser,getAllMessages } from '../../../services/User/apiMethods';
 import { useSelector } from 'react-redux';
 import { format } from 'timeago.js'; 
-function ConverSation(conversation,typing) {
+function ConverSation(conversation) {
   const formattedCreatedAt = format(conversation.conversation.lastMessageTime);
     const [convUser,setConvUser] = useState('')
     const [lastMessage,setLastMessage] =useState(conversation.conversation.lastMessage)
     const {user} = useSelector((state)=>state.auth)
     const [count,setCount] =useState(0)
     useEffect(()=>{
-        
+   
         const otherUserId = conversation.conversation.members.find(memberId => memberId !== user._id);
         getSingleUser(otherUserId).then((response)=>{
           setConvUser(response)

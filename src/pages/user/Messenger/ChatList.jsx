@@ -64,9 +64,10 @@ const ChatList = ({ setCurrentChat }) => {
   <ul className="flex flex-col inline-block w-full h-screen px-2 select-none">
    
   {conversations.map((conversation) => (
-      <div onClick={()=>handleConversationClick(conversation)}>
-          <Conversation key={conversation._id} conversation={conversation} />
-      </div>
+      <div onClick={() => { handleConversationClick(conversation) }}>
+  <Conversation key={conversation._id} conversation={conversation}  />
+</div>
+
       
       ))}
   </ul>

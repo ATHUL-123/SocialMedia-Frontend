@@ -11,6 +11,7 @@ const Message = ({index, text, createdAt, isSender, messageId, allReaded, delete
   const [selfDeleted, setSelfDeleted] = useState(false);
   const [everyOneDelete,setEveryOneDelete] = useState(false)
 
+
   useEffect(() => {
     if (allReaded) {
       console.log('yeas message readed',index);

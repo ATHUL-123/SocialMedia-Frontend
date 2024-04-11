@@ -14,6 +14,7 @@ const Chat = () => {
   // State for current chat and sidebar visibility
   const [currChat, setCurrentChat] = useState(conversation);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  
 
   useEffect(()=>{
    

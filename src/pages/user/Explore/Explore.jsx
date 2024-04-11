@@ -26,11 +26,13 @@ const Explore = () => {
   const getAllPosts = () => {
     explorePosts(page, pageSize, searchQuery)
       .then((response) => {
+        console.log('ress,',response);
         setPosts([...posts, ...response]);
         setLoading(false);
       })
       .catch((error) => {
         console.log(error);
+
         setLoading(false);
       });
   };

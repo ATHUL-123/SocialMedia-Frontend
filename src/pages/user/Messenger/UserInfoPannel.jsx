@@ -34,7 +34,7 @@ const UserInfoPanel = ({currChat,toggleSidebar}) => {
           </svg>
         </button>
         <div className="ml-4 mr-auto text-lg font-medium">Info</div>
-        <button type="button" className="p-2 text-gray-500 rounded-full focus:outline-none hover:text-gray-600 hover:bg-gray-200">
+        {/* <button type="button" className="p-2 text-gray-500 rounded-full focus:outline-none hover:text-gray-600 hover:bg-gray-200">
           <svg className="w-6 h-6 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path fillRule="nonzero" d="M7.70710678,20.7071068 C7.5195704,20.8946432 7.26521649,21 7,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,17 C3,16.7347835 3.10535684,16.4804296 3.29289322,16.2928932 L16.5857864,3 C17.3257272,2.26005924 18.5012114,2.22111499 19.2869988,2.88316725 L19.4142136,3 L21,4.58578644 C21.7399408,5.3257272 21.778885,6.50121136 21.1168328,7.28699879 L21,7.41421356 L7.70710678,20.7071068 Z M5,17.4142136 L5,19 L6.58578644,19 L16.5857864,9 L15,7.41421356 L5,17.4142136 Z M18,4.41421356 L16.414,5.99921356 L18,7.58521356 L19.5857864,6 L18,4.41421356 Z"/>
           </svg>
@@ -43,7 +43,7 @@ const UserInfoPanel = ({currChat,toggleSidebar}) => {
           <svg className="w-6 h-6 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path fillRule="nonzero" d="M12,16 C13.1045695,16 14,16.8954305 14,18 C14,19.1045695 13.1045695,20 12,20 C10.8954305,20 10,19.1045695 10,18 C10,16.8954305 10.8954305,16 12,16 Z M12,10 C13.1045695,10 14,10.8954305 14,12 C14,13.1045695 13.1045695,14 12,14 C10.8954305,14 10,13.1045695 10,12 C10,10.8954305 10.8954305,10 12,10 Z M12,4 C13.1045695,4 14,4.8954305 14,6 C14,7.1045695 13.1045695,8 12,8 C10.8954305,8 10,7.1045695 10,6 C10,4.8954305 10.8954305,4 12,4 Z"/>
           </svg>
-        </button>
+        </button> */}
       </div>
       <div>
         <div className="flex justify-center mb-4">
@@ -92,7 +92,7 @@ const UserInfoPanel = ({currChat,toggleSidebar}) => {
           </div>
         </div>
       </div>
-      <div>
+      {/* <div>
         <div className="flex items-center w-full px-3 mt-4 mb-2">
           <div className="px-2 text-gray-500 cursor-pointer">
             <svg className="w-6 h-6 text-blue-500 fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -104,8 +104,8 @@ const UserInfoPanel = ({currChat,toggleSidebar}) => {
             <div className="mt-1 mr-auto text-sm font-semibold leading-none text-gray-600">Enabled</div>
           </div>
         </div>
-      </div>
-      <ul className="flex flex-row items-center justify-around px-3 mb-1 list-none border-b select-none">
+      </div> */}
+      {/* <ul className="flex flex-row items-center justify-around px-3 mb-1 list-none border-b select-none">
         <li className="flex-auto px-4 mx-1 -mb-px text-center rounded-t-lg cursor-pointer last:mr-0 hover:bg-gray-200">
           <a href="#_" className="block py-3 text-gray-600">Media</a>
         </li>
@@ -118,7 +118,7 @@ const UserInfoPanel = ({currChat,toggleSidebar}) => {
         <li className="flex-auto px-4 mx-1 -mb-px text-center rounded-t-lg cursor-pointer last:mr-0 hover:bg-gray-200">
           <a href="#_" className="block py-3 text-gray-600">Audio</a>
         </li>
-      </ul>
+      </ul> */}
      
     </nav> 
 

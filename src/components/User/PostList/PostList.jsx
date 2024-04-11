@@ -6,7 +6,10 @@ import DropdownMenu from './DropDown'; // Import the DropdownMenu component
 import CommentModal from '../Comments/Comment';
 import './PostList.css';
 import { FaThumbsUp, FaCommentAlt, FaShare } from 'react-icons/fa';
+import { FiHeart } from "react-icons/fi";
+import { RiHeartFill } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
+import LikedUsers from '../LikedUsers/LikedUsers';
 
 const PostList = ({ post }) => {
   const [isLiked, setIsLiked] = useState(post.isLiked);
@@ -14,6 +17,7 @@ const PostList = ({ post }) => {
   const [dropDown, setDropDown] = useState(false);
   const [openComment,setOpenComment] = useState(false)
   const [saved,setSaved]=useState(post.isSaved)
+  const [openLiked,setOpenLiked] =useState(false)
   const navigate =useNavigate()
 
   const toggleDropdown = () => {
@@ -49,6 +53,10 @@ const PostList = ({ post }) => {
         console.log(error);
       });
   };
+
+  const handleShowLiked =()=>{
+      setOpenLiked(!openLiked)
+  } 
 
   const handlSavePost =(postId)=>{
      savePost(postId)
@@ -178,9 +186,9 @@ const PostList = ({ post }) => {
       </span>
     ))}
   </div>
-  {totalLikes > 3 && (
-    <p style={{ fontSize: 'small' }}>
-      <span style={{ fontWeight: 'bold' }}>{post.likes[0].userName}</span> and {totalLikes - 2} other people liked this post
+  {totalLikes > 1 && (
+    <p className='cursor-pointer' onClick={()=>handleShowLiked(post._id)} style={{ fontSize: 'small' }}>
+      <span style={{ fontWeight: 'bold' }}>{post.likes[0].userName}</span> and {totalLikes - 1} other people liked this post
     </p>
   )}
 </div>
@@ -191,10 +199,9 @@ const PostList = ({ post }) => {
         className={`w-1/3 hover:bg-gray-100 flex items-center justify-center text-lg font-semibold cursor-pointer transition-colors duration-300 ease-in-out ${isLiked ? 'text-blue-500' : 'text-gray-700'
           }`}
       >
-        <span className="inline-flex items-center">
-          {isLiked ? <FaThumbsUp className="mr-1" /> : <FaThumbsUp className="far mr-1" />}
-          <span>Like</span>
-        </span>
+<span className="inline-flex items-center">
+  {isLiked ? <RiHeartFill className="heart-icon mr-1" style={{ color: 'red', fontSize: '24px' }} /> : <FiHeart className="far mr-1" style={{ fontSize: '24px' }} />}
+</span>
       </div>
       <div
         className="w-1/3 hover:bg-gray-100 border-l-4 border-r flex items-center justify-center text-lg text-gray-700 font-semibold cursor-pointer transition-colors duration-300 ease-in-out"
@@ -214,6 +221,7 @@ const PostList = ({ post }) => {
         </span>
       </div>
     </div>
+    {openLiked && <LikedUsers isOpen={openLiked} toggleModal={handleShowLiked} postId={post._id}/>}
     {openComment && <CommentModal isOpen={openComment} onClose={() => setOpenComment(false)} post={post} />}
   </div>
   

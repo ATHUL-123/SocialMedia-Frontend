@@ -4,7 +4,7 @@ import { AiFillHeart, AiOutlineComment, AiFillEdit, AiOutlineDelete } from 'reac
 import CommentModal from '../Comments/Comment';
 import EditPost from '../Modals/EditPost';
 import { getCommentCount } from '../../../services/User/apiMethods';
-
+import LikedUsers from '../LikedUsers/LikedUsers';
 
 
 import DeleteConfirm from '../Modals/DeleteConfirm';
@@ -16,8 +16,10 @@ function MyPost({ post }) {
   const [showComments,setShowComments] = useState(false)
   const [commentCount,setCommentCount] = useState(0)
   const [likeCount,setLikeCount]       = useState(0) 
- 
-
+  const [openLiked,setOpenLiked] =useState(false)
+  const handleShowLiked =()=>{
+    setOpenLiked(!openLiked)
+} 
   useEffect(()=>{
 getCommentCount(post._id)
    .then((response)=>{
@@ -58,6 +60,7 @@ getCommentCount(post._id)
   return (
     <>
     <div>
+    {openLiked && <LikedUsers isOpen={openLiked} toggleModal={handleShowLiked} postId={post._id}/>}
       {showComments && <CommentModal isOpen={showComments} onClose={toggleComment} post={post}/> }
       <img className="object-cover object-center w-full h-64 rounded-lg lg:h-80" src={post.image} alt=""/>
       <div className="mt-8">
@@ -71,7 +74,7 @@ getCommentCount(post._id)
           </div>
           <div className="flex items-center space-x-4">
             <div className="relative flex items-center space-x-1">
-              <AiFillHeart className="h-6 w-6 text-gray-400 cursor-pointer" />
+              <AiFillHeart onClick={()=>handleShowLiked(post._id)} className="h-6 w-6 text-gray-400 cursor-pointer" />
               <span className="text-gray-400">{likeCount}</span>
               <div onClick={toggleComment}>
               <AiOutlineComment  className="h-6 w-6 text-gray-400 cursor-pointer" />

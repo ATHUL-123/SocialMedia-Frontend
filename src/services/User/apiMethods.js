@@ -751,3 +751,35 @@ export const deleteMessage=(messageId,type)=>{
     }
   })
 }
+
+export const fetchTaggedPost=(userId)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',postUrl.fetchTaggedPost(userId))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const fetchLiked=(postId)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',postUrl.fetchLiked(postId))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

@@ -38,7 +38,7 @@ const ChatWindow = ({ currChat }) => {
     useEffect(() => {
       
       socket.current = io('http://localhost:7002');
-    
+      
       socket.current.on("getMessage", (data) => {
         setArrivalMessage({
           senderId: data.senderId,

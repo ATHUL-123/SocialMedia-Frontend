@@ -10,9 +10,11 @@ import ProfileCard from '../../../components/User/ProfileCard/ProfileCard';
 import OnlinePeople from '../../../components/User/OnlinePeople/OnlinePeople';
 import UsersList from '../../../components/User/UsersList/UsersList';
 import Header from '../../../components/User/Header/Header'
-import { fetchSaved } from '../../../services/User/apiMethods';
+import { fetchSaved ,fetchTaggedPost} from '../../../services/User/apiMethods';
 import SavedPost from '../../../components/User/SavedPost/SavedPost';
+import TaggedPost from '../../../components/User/TaggedPost/TaggedPost';
 const MyPost = lazy(() => import('../../../components/User/MyPost/MyPost'));
+
 
 function Profile() {
   const dispatch = useDispatch();
@@ -21,6 +23,8 @@ function Profile() {
   const { posts } = useSelector((state) => state.post);
   const [showUserList, setShowUserList] = useState(true);
   const [savedPosts,setSavdPosts]=useState([])
+  const [taggedPost,setTaggedPost]=useState([])
+
 
   useEffect(() => {
    
@@ -36,10 +40,27 @@ function Profile() {
 
   const [saved, setSaved] = useState(false);
 
+  const [tagged,setTagged] = useState(false)
+
   const onChangeMyPost = () => {
     setMyPost(true);
    setSaved(false);
   };
+
+  const onChangeTagged = () => {
+    fetchTaggedPost(user._id)
+        .then((response) => {
+         console.log(response);
+            setTaggedPost(response);
+            setTagged(true);
+            setMyPost(false);
+            setSaved(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+};
+
 
   const onChangeSaved = () => {
     fetchSaved()
@@ -47,11 +68,13 @@ function Profile() {
   
         setSavdPosts(response);
         setSaved(true);
+        setTagged(false);
         setMyPost(false);
     })
     .catch((error) => {
         setMyPost(true);
         setSaved(false);
+        setTagged(false);
     });
 }
 
@@ -88,7 +111,16 @@ function Profile() {
         style={{ fontFamily: 'Courier New, sans-serif' }} // Adjust font family
       >
    
-        My Posts 
+        My Post
+      </span>
+    </li>
+    <li className="flex mt-2 -mb-[2px]">
+      <span
+        onClick={onChangeTagged}
+        className="py-2 px-4 mr-1 sm:mr-3 lg:mr-10 cursor-pointer transition-colors duration-200 ease-in-out border-b-2 border-transparent group-[.active-followers]:border-primary group-[.active-followers]:text-primary text-black rounded-md hover:text-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200"
+        style={{ fontFamily: 'Courier New, sans-serif' }} // Adjust font family
+      >
+        Tagged Post
       </span>
     </li>
   </ul>
@@ -119,6 +151,19 @@ function Profile() {
                   <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
                     {savedPosts.map((post, index) => (
                       <SavedPost key={index} saved={post} setSavedPosts={setSavdPosts} />
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )}
+            {tagged && (
+              <section className="bg-white dark:bg-gray-900">
+                <div className="container px-6 py-1 mx-auto">
+                  
+                  <hr className="my-8 border-gray-200 dark:border-gray-700" />
+                  <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+                    {taggedPost.map((post, index) => (
+                      <TaggedPost key={index} post={post} setTaggedPost={setTaggedPost} />
                     ))}
                   </div>
                 </div>

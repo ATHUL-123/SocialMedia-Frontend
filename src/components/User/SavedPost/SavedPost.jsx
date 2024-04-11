@@ -5,7 +5,7 @@ import CommentModal from '../Comments/Comment';
 import EditPost from '../Modals/EditPost';
 import { getCommentCount,removeSaved } from '../../../services/User/apiMethods';
 import DeleteConfirm from '../Modals/DeleteConfirm';
-
+import LikedUsers from '../LikedUsers/LikedUsers';
 function SavedPost({ saved ,setSavedPosts}) {
   const [isEditPost, setIsEditPost] = useState(false);
   const [showComments, setShowComments] = useState(false);
@@ -13,6 +13,10 @@ function SavedPost({ saved ,setSavedPosts}) {
   const [likeCount, setLikeCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [openLiked,setOpenLiked] =useState(false)
+  const handleShowLiked =()=>{
+    setOpenLiked(!openLiked)
+} 
   console.log('savedddddddd',saved);
   useEffect(() => {
     
@@ -65,6 +69,7 @@ function SavedPost({ saved ,setSavedPosts}) {
   return (
     <>
       <div>
+      {openLiked && <LikedUsers isOpen={openLiked} toggleModal={handleShowLiked} postId={saved.postId._id}/>}
         {showComments && <CommentModal isOpen={showComments} onClose={toggleComment} post={saved.postId} />}
         <img className="object-cover object-center w-full h-64 rounded-lg lg:h-80" src={saved.postId.image} alt="" />
         <div className="mt-8">
@@ -78,7 +83,7 @@ function SavedPost({ saved ,setSavedPosts}) {
             </div>
             <div className="flex items-center space-x-4">
               <div className="relative flex items-center space-x-1">
-                <AiFillHeart className="h-6 w-6 text-gray-400 cursor-pointer" />
+                <AiFillHeart onClick={()=>handleShowLiked(saved.postId._id)} className="h-6 w-6 text-gray-400 cursor-pointer" />
                 <span className="text-gray-400">{likeCount}</span>
                 <div onClick={toggleComment}>
                   <AiOutlineComment className="h-6 w-6 text-gray-400 cursor-pointer" />
