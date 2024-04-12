@@ -1,25 +1,32 @@
 
-
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import io from 'socket.io-client';
+import React, { createContext, useContext, useEffect, useRef } from 'react';
 import {useSelector} from 'react-redux'
+import io from 'socket.io-client';
+
 const SocketContext = createContext();
 
 export const useSocket = () => useContext(SocketContext);
 
 export const SocketProvider = ({ children }) => {
-    const {user} = useSelector((state)=>state.auth)
-  const [socket, setSocket] = useState(null);
+  const socket = useRef(null);
+  const {user} = useSelector((state)=>state.auth)
 
   useEffect(() => {
-    // Create socket connection
-    const newSocket = io('http://localhost:7002');
-    setSocket(newSocket);
+
+ // Initialize socket connection when component mounts
+ socket.current = io('http://localhost:7002');
+ if(user){
+  socket.current.emit('addUser', user._id)
+ }
  
-    // Clean up socket connection on unmount
-    return () => {
-      newSocket.disconnect();
-    };
+ // Disconnect socket when component unmounts
+ return () => {
+   if (socket.current) {
+     socket.current.disconnect();
+   }
+ };
+
+   
   }, []);
 
   return (

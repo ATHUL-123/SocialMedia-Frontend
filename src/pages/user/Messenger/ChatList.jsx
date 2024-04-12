@@ -7,8 +7,11 @@ const ChatList = ({ setCurrentChat }) => {
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.auth);
+ 
+
 
   useEffect(() => {
+    
     // Fetch conversations data
     getAllConversations()
       .then((response) => {
@@ -65,7 +68,7 @@ const ChatList = ({ setCurrentChat }) => {
    
   {conversations.map((conversation) => (
       <div onClick={() => { handleConversationClick(conversation) }}>
-  <Conversation key={conversation._id} conversation={conversation}  />
+  <Conversation key={conversation._id} conversation={conversation}   />
 </div>
 
       

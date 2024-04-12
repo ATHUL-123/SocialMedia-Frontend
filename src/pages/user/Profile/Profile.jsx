@@ -13,6 +13,7 @@ import Header from '../../../components/User/Header/Header'
 import { fetchSaved ,fetchTaggedPost} from '../../../services/User/apiMethods';
 import SavedPost from '../../../components/User/SavedPost/SavedPost';
 import TaggedPost from '../../../components/User/TaggedPost/TaggedPost';
+import MypostSkelton from '../../../components/User/Skeltons/MypostSkelton';
 const MyPost = lazy(() => import('../../../components/User/MyPost/MyPost'));
 
 
@@ -24,6 +25,7 @@ function Profile() {
   const [showUserList, setShowUserList] = useState(true);
   const [savedPosts,setSavdPosts]=useState([])
   const [taggedPost,setTaggedPost]=useState([])
+  const [loading,setLoading] =useState(false)
 
 
   useEffect(() => {
@@ -45,9 +47,11 @@ function Profile() {
   const onChangeMyPost = () => {
     setMyPost(true);
    setSaved(false);
+   setTagged(false);
   };
 
   const onChangeTagged = () => {
+    setLoading(true)
     fetchTaggedPost(user._id)
         .then((response) => {
          console.log(response);
@@ -55,6 +59,7 @@ function Profile() {
             setTagged(true);
             setMyPost(false);
             setSaved(false);
+            setLoading(false)
         })
         .catch((error) => {
           console.log(error);
@@ -63,6 +68,7 @@ function Profile() {
 
 
   const onChangeSaved = () => {
+    setLoading(true)
     fetchSaved()
     .then((response) => {
   
@@ -70,6 +76,7 @@ function Profile() {
         setSaved(true);
         setTagged(false);
         setMyPost(false);
+        setLoading(false)
     })
     .catch((error) => {
         setMyPost(true);
@@ -126,9 +133,22 @@ function Profile() {
   </ul>
 </div>
           </div>
+
+          {loading && (
+  <section className="bg-white dark:bg-gray-900">
+    <div className="container px-6 py-1 mx-auto">
+      <hr className="my-8 border-gray-200 dark:border-gray-700" />
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+        {[...Array(3)].map((_, index) => (
+          <MypostSkelton key={index} />
+        ))}
+      </div>
+    </div>
+  </section>
+)}
           {/* Lazy load MyPost components using map */}
           <Suspense fallback={<Spinner />}>
-            {myPost && (
+            {!loading && myPost && (
               <section className="bg-white dark:bg-gray-900">
                 <div className="container px-6 py-1 mx-auto">
                   
@@ -143,7 +163,7 @@ function Profile() {
             )}
           </Suspense>
         
-            {saved && (
+            {!loading &&  saved && (
               <section className="bg-white dark:bg-gray-900">
                 <div className="container px-6 py-1 mx-auto">
                   
@@ -156,7 +176,7 @@ function Profile() {
                 </div>
               </section>
             )}
-            {tagged && (
+            {!loading && tagged && (
               <section className="bg-white dark:bg-gray-900">
                 <div className="container px-6 py-1 mx-auto">
                   

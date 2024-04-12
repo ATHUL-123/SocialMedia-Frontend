@@ -93,6 +93,7 @@ export const userUrl ={
   getAllNotifications:`/api/users/notifications`,
   isFollowing:(userId)=>`/api/users/isFollowing/${userId}`,
   searchAll:(searchQuery)=>`/api/users/searchallusers?searchQuery=${searchQuery}`,
+  getConnectionCount:(userId)=>`/api/users/get-count/${userId}`,
   
 
   //kyc for authentication

@@ -20,7 +20,7 @@ const Login = () => {
   const [emailError,setEmailError] = useState(false);
   const [passwordError,setPasswordError] = useState(false);
   const [message,setMessage] = useState('')
-
+ 
   // To check if the user is already logged in
   useEffect(() => {
     // if (isError) {
@@ -40,6 +40,8 @@ const Login = () => {
       const response = await dispatch(login({ email, password }));
       if (response.payload.status === 200) {
         toast.success(response.payload.message);
+       
+      
         navigate('/');
       } else {
         if(response.payload === 'Invalid password'){

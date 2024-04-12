@@ -783,3 +783,19 @@ export const fetchLiked=(postId)=>{
     }
   })
 }
+
+export const getConnectionCount=(userId)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',userUrl.getConnectionCount(userId))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

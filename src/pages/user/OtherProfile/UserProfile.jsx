@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
-import { followUsers, unFollowUsers } from '../../../services/User/apiMethods';
+import React, { useState,useEffect } from 'react';
+import { followUsers, unFollowUsers,getConnectionCount } from '../../../services/User/apiMethods';
 
 function UserProfile({ user, following }) {
   let initialFollowingState;
   
+
+  const [followerCount,setFollowerCount] = useState(0)
+  const [followingCount,setFollowingCount]=useState(0)
+
+useEffect(()=>{
+  if(user){
+    getConnectionCount(user._id)
+    .then((response)=>{
+     console.log(response);
+     setFollowerCount(response.followersCount)
+     setFollowingCount(response.followingCount)
+    })
+  }
+ 
+},[])
+
+
   // Determine the initial state of isFollowing based on the value of following
   if (following === 'requested') {
     console.log(following);
@@ -146,7 +163,11 @@ function UserProfile({ user, following }) {
               </div>
               <div className="flex flex-wrap justify-between">
                 <div className="flex flex-wrap items-center">
-                  {/* Existing profile metrics */}
+             
+
+    <a  className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">{followingCount} Following</a>
+    <a  className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">{followerCount} Followers</a>
+
                 </div>
               </div>
             </div>

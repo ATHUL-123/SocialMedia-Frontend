@@ -5,7 +5,7 @@ import { getAllMessages, getSingleUser, sendNewMessage, addNewConversation } fro
 import { useSelector } from 'react-redux';
 
 import Spinner from '../../../components/User/Spinner/Spinner';
-import io from 'socket.io-client';
+import { useSocket } from '../../../utils/SocketContext';
 import './chatWindow.css'
 import { BsChatDots } from "react-icons/bs";
 import { messageReaded } from '../../../services/User/apiMethods';
@@ -30,14 +30,15 @@ const ChatWindow = ({ currChat }) => {
   const [isReceiverTyping, setIsReceiverTyping] = useState(false);
   const [readed,setReaded] = useState(false)
   const [conv,setConv] =useState(currChat  || null )
-  const socket = useRef()
+
+  const socket = useSocket();
   const [allReaded,setAllReaded] =useState(false)
  
 
    
     useEffect(() => {
       
-      socket.current = io('http://localhost:7002');
+      
       
       socket.current.on("getMessage", (data) => {
         setArrivalMessage({
@@ -50,10 +51,7 @@ const ChatWindow = ({ currChat }) => {
       
       });
 
-      return () => {
-        socket.current.disconnect();
-       
-      };
+
     }, []);
 
 
@@ -142,9 +140,11 @@ const ChatWindow = ({ currChat }) => {
 
 
   useEffect(() => {
-    socket.current.emit('addUser', user._id)
+    
     socket.current.on('getUsers', users => {
+      console.log('userrrrrrsddd');
       console.log(users);
+    
     })
   }, [socket])
 
@@ -256,7 +256,12 @@ const ChatWindow = ({ currChat }) => {
             </div>
             <div className="flex flex-col justify-center flex-1 overflow-hidden cursor-pointer">
               <div className="overflow-hidden text-base font-medium leading-tight text-gray-600 whitespace-no-wrap">{sender.userName}</div>
-              <div className="overflow-hidden text-sm font-medium leading-tight text-gray-600 whitespace-no-wrap">Online</div>
+              {sender && isReceiverTyping ? (
+  <div className="overflow-hidden text-sm font-medium leading-tight text-gray-600 whitespace-no-wrap">Typing...</div>
+) : (
+  null
+)}
+
             </div>
             <div className="relative hidden w-48 pl-2 my-3 border-l-2 border-blue-500 cursor-pointer lg:block">
               <div className="text-base font-medium text-blue-500">Pinned message</div>

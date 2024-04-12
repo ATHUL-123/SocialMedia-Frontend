@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditProfile from '../Modals/EditProfile';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../../features/auth/authSlice';
@@ -11,6 +11,7 @@ import { VscVerifiedFilled } from "react-icons/vsc";
 import KYCForm from '../Razorpay/KycForm';
 import AddVerifiedModal from '../Razorpay/VerifyModal';
 import RemoveConfirm from '../Modals/RemoveVerify';
+import { getConnectionCount } from '../../../services/User/apiMethods';
 
 
 function ProfileCard({user,posts}) {
@@ -26,7 +27,19 @@ function ProfileCard({user,posts}) {
     const [VerifyModal,setVerifyModal] =useState(false)
     const [removeVerify, setRemoveVerify] = useState(false);
     const [openKyc,setOpenKyc]= useState(false)
-     
+    const [followerCount,setFollowerCount] = useState(0)
+    const [followingCount,setFollowingCount]=useState(0)
+
+  useEffect(()=>{
+    getConnectionCount(user._id)
+     .then((response)=>{
+      console.log(response);
+      setFollowerCount(response.followersCount)
+      setFollowingCount(response.followingCount)
+     })
+  },[])
+
+    
     const toggleDropdown = () => {
       setIsOpen(!isOpen);
     };
@@ -201,8 +214,8 @@ function ProfileCard({user,posts}) {
         </div>
         <div className="flex flex-wrap justify-between">
   <div className="flex flex-wrap items-center">
-    <a onClick={() => setFollowingModal(true)} className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">320 Following</a>
-    <a onClick={()=>setFollowersModal(true)} className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">2.5k Followers</a>
+    <a onClick={() => setFollowingModal(true)} className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">{followingCount} Following</a>
+    <a onClick={()=>setFollowersModal(true)} className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">{followerCount} Followers</a>
     <a onClick={()=>setRequest(true)}  className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">Request</a>
   </div>
 </div>

@@ -11,7 +11,7 @@ import SideProfile from '../../../components/User/SideProfile/SideProfile';
 import './Home.css';
 import UsersList from '../../../components/User/UsersList/UsersList';
 import { getAllFollowesPost } from '../../../services/User/apiMethods';
-
+import { useSocket } from '../../../utils/SocketContext';
 const Home = () => {
   const [showUserList, setShowUserList] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -22,6 +22,16 @@ const Home = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+ const socket = useSocket()
+ useEffect(()=>{
+  if(socket.current){
+    console.log('user is added ');
+    socket.current.emit('addUser', user._id)
+  }else{
+    console.log('socket is not connected');
+  }
+ 
+ },[socket])
 
   useEffect(() => {
     setLoading(true);
