@@ -14,7 +14,7 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
 
  // Initialize socket connection when component mounts
- socket.current = io('http://localhost:7002');
+ socket.current = io('https://hyperedge.online');
  if(user){
   socket.current.emit('addUser', user._id)
  }
