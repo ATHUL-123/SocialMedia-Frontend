@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL =process.env.BASE_URL ||'http://localhost:7002';
+const BASE_URL =process.env.BASE_URL ||'https://hyperedge.online';
 
 export const api = axios.create({
   baseURL: BASE_URL,
