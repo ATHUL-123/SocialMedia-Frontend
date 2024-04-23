@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const BASE_URL = 'http://localhost:7002';
+const BASE_URL = 'https://hyperedge.online';
 const API_URL = '/api/posts';
 
 const postService = {

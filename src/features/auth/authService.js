@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API_URL ='/api/users'
-const BASE_URL ='http://localhost:7002'
+const BASE_URL ='https://hyperedge.online'
 
 
 //Login user
