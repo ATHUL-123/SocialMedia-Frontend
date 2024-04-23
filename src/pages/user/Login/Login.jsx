@@ -21,15 +21,15 @@ const Login = () => {
   const [passwordError,setPasswordError] = useState(false);
   const [message,setMessage] = useState('')
  
-  // To check if the user is already logged in
-  useEffect(() => {
-    // if (isError) {
-    //   toast.error(message);
-    // }
-    if (isSuccess || user) {
-      navigate('/');
-    }
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
+  // // To check if the user is already logged in
+  // useEffect(() => {
+  //   // if (isError) {
+  //   //   toast.error(message);
+  //   // }
+  //   if (isSuccess || user) {
+  //     navigate('/');
+  //   }
+  // }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
@@ -41,7 +41,7 @@ const Login = () => {
       if (response.payload.status === 200) {
         toast.success(response.payload.message);
        
-      
+         
         navigate('/');
       } else {
         if(response.payload === 'Invalid password'){

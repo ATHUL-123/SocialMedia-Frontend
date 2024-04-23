@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { getSingleUser, getAllMessages } from '../../../services/User/apiMethods';
 import { useSelector } from 'react-redux';
-import { format } from 'timeago.js'; 
+import { format } from 'timeago.js';
 import { useSocket } from '../../../utils/SocketContext';
 
-function Conversation({ conversation }) {
+function Conversation({ conversation, setOnlineUsers }) {
   const formattedCreatedAt = format(conversation.lastMessageTime);
   const [convUser, setConvUser] = useState('');
   const [lastMessage, setLastMessage] = useState(conversation.lastMessage);
   const { user } = useSelector((state) => state.auth);
   const [count, setCount] = useState(0);
-  const [onlineUsers, setOnlineUsers] = useState([]);
+
   const [isOnline, setIsOnline] = useState(false);
   const socket = useSocket();
 
@@ -24,19 +24,17 @@ function Conversation({ conversation }) {
         console.log(error);
       });
   }, []);
-  
+
 
   useEffect(() => {
     if (socket.current) {
-      socket.current.emit('fetchOnline',{userId:user._id})
+      socket.current.emit('fetchOnline', { userId: user._id })
       socket.current.on('getUsers', users => {
         const online = users.filter(user => user.userId !== user._id);
         setOnlineUsers(online);
         setIsOnline(online.some(user => user.userId === convUser._id));
       });
-    } else {
-      console.log('socket is not available');
-    }
+    } 
   }, [socket, convUser]);
 
   useEffect(() => {

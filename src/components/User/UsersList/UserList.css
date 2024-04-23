@@ -3,7 +3,7 @@
 }
 
 .scroll-container {
-  max-height: calc(100% - 50px); /* Adjust as needed */
+  max-height: calc(100% - 40px); /* Adjust as needed */
   overflow-y: hidden; /* Allow vertical scrolling if needed */
   
 }
@@ -21,3 +21,4 @@
 .scroll-container::-webkit-scrollbar {
   display: none;
 }
+

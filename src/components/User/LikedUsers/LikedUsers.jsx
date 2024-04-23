@@ -4,21 +4,21 @@ import { fetchLiked } from '../../../services/User/apiMethods';
 import ListCard from '../ListCard/ListCard';
 import { useSelector } from 'react-redux';
 import '../Modals/FollowerModal.css'
-function LikedUsers({ isOpen, toggleModal ,postId }) {
+function LikedUsers({ isOpen, toggleModal, postId }) {
   const modalRoot = document.getElementById('portal-root');
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
 
-  const {user} = useSelector((state)=>state.auth)
+  const { user } = useSelector((state) => state.auth)
   const userId = user._id;
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-      
-        const response= await fetchLiked(postId);
+
+        const response = await fetchLiked(postId);
         setUsers(response);
-   
+
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -57,7 +57,7 @@ function LikedUsers({ isOpen, toggleModal ,postId }) {
           <div className="max-h-[400px] overflow-y-auto">
             <div className="mt-5 text-center">
               <h3 className="text-lg font-medium text-gray-800 dark:text-white" id="modal-title">
-               Liked Users
+                Liked Users
               </h3>
 
               {/* List */}
@@ -70,7 +70,7 @@ function LikedUsers({ isOpen, toggleModal ,postId }) {
               </div>
 
               {loading && <p>Loading...</p>}
-             
+
             </div>
           </div>
 

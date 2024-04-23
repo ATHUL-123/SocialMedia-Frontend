@@ -34,15 +34,25 @@ export const apiCall = async (method, url, data) => {
         if(response){
           resolve(response.data);
         } else if (error) {
-         
-            reject(error)
+          if (error.code === 'ERR_NETWORK') {
+            // Redirect to error page
+            window.location.href = '/error';
+          } else {
+            // Handle other errors
+            reject(error);
+          }
         
         }
           
         
       } catch (err) {
-  
+        if (err.code === 'ERR_NETWORK') {
+          // Redirect to error page
+          window.location.href = '/error';
+        } else {
+          // Handle other errors
           reject(err);
+        }
       }
     });
   };

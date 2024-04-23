@@ -1,16 +1,16 @@
 import React from 'react';
 import { takeAction } from '../../../services/Admin/apiMethods';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 
 function BlockPostModal({ isOpen, onClose, post, user }) {
     const navigate = useNavigate()
-    const handleBlock=()=>{
-        console.log('hi');
-        takeAction(post._id).then((response)=>{
+    const handleBlock = () => {
+
+        takeAction(post._id).then((response) => {
             window.location.reload();
-        }).catch((err)=>{
-           onClose()
+        }).catch((err) => {
+            onClose()
         })
     }
     return (
@@ -36,7 +36,7 @@ function BlockPostModal({ isOpen, onClose, post, user }) {
                         <button onClick={onClose} className="w-full px-4 py-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:w-1/2 sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40">
                             Cancel
                         </button>
-                        <button onClick={()=>handleBlock()} className="w-full px-4 py-2 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                        <button onClick={() => handleBlock()} className="w-full px-4 py-2 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:mt-0 sm:w-1/2 sm:mx-2 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
                             Block
                         </button>
                     </div>

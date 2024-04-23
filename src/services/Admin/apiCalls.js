@@ -34,14 +34,14 @@ export const apiCall = async (method,url, data) => {
         if(response){
           resolve(response.data);
         } else if (error) {
-         
+          
             reject(error)
         
         }
           
         
       } catch (err) {
-  
+        
           reject(err);
       }
     });

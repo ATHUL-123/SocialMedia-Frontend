@@ -3,23 +3,23 @@ import { format } from 'date-fns';
 import { AiFillHeart, AiOutlineComment, AiFillEdit, AiOutlineDelete } from 'react-icons/ai';
 import CommentModal from '../Comments/Comment';
 import EditPost from '../Modals/EditPost';
-import { getCommentCount,removeSaved } from '../../../services/User/apiMethods';
+import { getCommentCount, removeSaved } from '../../../services/User/apiMethods';
 import DeleteConfirm from '../Modals/DeleteConfirm';
 import LikedUsers from '../LikedUsers/LikedUsers';
-function SavedPost({ saved ,setSavedPosts}) {
+function SavedPost({ saved, setSavedPosts }) {
   const [isEditPost, setIsEditPost] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
   const [likeCount, setLikeCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
-  const [openLiked,setOpenLiked] =useState(false)
-  const handleShowLiked =()=>{
+  const [openLiked, setOpenLiked] = useState(false)
+  const handleShowLiked = () => {
     setOpenLiked(!openLiked)
-} 
-  console.log('savedddddddd',saved);
+  }
+  console.log('savedddddddd', saved);
   useEffect(() => {
-    
+
     getCommentCount(saved.postId._id)
       .then((response) => {
         setCommentCount(response.commentCount);
@@ -63,27 +63,27 @@ function SavedPost({ saved ,setSavedPosts}) {
         // Handle errors
       });
   };
-  
+
 
 
   return (
     <>
       <div>
-      {openLiked && <LikedUsers isOpen={openLiked} toggleModal={handleShowLiked} postId={saved.postId._id}/>}
+        {openLiked && <LikedUsers isOpen={openLiked} toggleModal={handleShowLiked} postId={saved.postId._id} />}
         {showComments && <CommentModal isOpen={showComments} onClose={toggleComment} post={saved.postId} />}
         <img className="object-cover object-center w-full h-64 rounded-lg lg:h-80" src={saved.postId.image} alt="" />
         <div className="mt-8">
-          <span className="text-blue-500 uppercase">{}</span>
+          <span className="text-blue-500 uppercase">{ }</span>
           <h1 className="mt-4 text-xl font-semibold text-gray-800 dark:text-white">{saved.postId.title}</h1>
           <p className="mt-2 text-gray-500 dark:text-gray-400">{saved.postId.description}</p>
           <div className="flex items-center justify-between mt-4">
             <div>
-              <a href="#" className="text-lg font-medium text-gray-700 dark:text-gray-300 hover:underline hover:text-gray-500">{}</a>
+              <a href="#" className="text-lg font-medium text-gray-700 dark:text-gray-300 hover:underline hover:text-gray-500">{ }</a>
               <p className="text-sm text-gray-500 dark:text-gray-400">{formattedDate}</p>
             </div>
             <div className="flex items-center space-x-4">
               <div className="relative flex items-center space-x-1">
-                <AiFillHeart onClick={()=>handleShowLiked(saved.postId._id)} className="h-6 w-6 text-gray-400 cursor-pointer" />
+                <AiFillHeart onClick={() => handleShowLiked(saved.postId._id)} className="h-6 w-6 text-gray-400 cursor-pointer" />
                 <span className="text-gray-400">{likeCount}</span>
                 <div onClick={toggleComment}>
                   <AiOutlineComment className="h-6 w-6 text-gray-400 cursor-pointer" />

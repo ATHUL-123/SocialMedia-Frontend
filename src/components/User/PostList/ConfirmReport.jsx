@@ -3,7 +3,7 @@ import React, { useEffect} from 'react';
 const ConfirmationModal = ({ isOpen,onClose,parentClose }) => {
   
     const handleConfirm = () => {
-        console.log('Confirmed');
+       
         onClose();
         parentClose();
     };

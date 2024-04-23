@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Message from './Message';
-
+import Picker from '@emoji-mart/react'
 import { getAllMessages, getSingleUser, sendNewMessage, addNewConversation } from '../../../services/User/apiMethods';
 import { useSelector } from 'react-redux';
-
+import { FcVideoCall } from "react-icons/fc";
 import Spinner from '../../../components/User/Spinner/Spinner';
 import { useSocket } from '../../../utils/SocketContext';
 import './chatWindow.css'
 import { BsChatDots } from "react-icons/bs";
 import { messageReaded } from '../../../services/User/apiMethods';
-
+import { useNavigate } from 'react-router-dom';
 const ChatWindow = ({ currChat }) => {
 
   const formatDate = (dateString) => {
@@ -17,8 +17,8 @@ const ChatWindow = ({ currChat }) => {
     const options = { month: 'short', day: 'numeric' };
     return date.toLocaleString('en-US', options);
   };
-
-
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const navigate = useNavigate()
   const scrollRef = useRef()
   const [messages, setMessages] = useState([]);
   const { user } = useSelector((state) => state.auth)
@@ -28,65 +28,69 @@ const ChatWindow = ({ currChat }) => {
   const [arrivalMessage, setArrivalMessage] = useState(null)
   const [isSenderTyping, setIsSenderTyping] = useState(false);
   const [isReceiverTyping, setIsReceiverTyping] = useState(false);
-  const [readed,setReaded] = useState(false)
-  const [conv,setConv] =useState(currChat  || null )
+  const [readed, setReaded] = useState(false)
+  const [conv, setConv] = useState(currChat || null)
 
   const socket = useSocket();
-  const [allReaded,setAllReaded] =useState(false)
- 
+  const [allReaded, setAllReaded] = useState(false)
 
-   
-    useEffect(() => {
-      
-      
-      
+
+
+  useEffect(() => {
+
+
+    if (socket.current) {
       socket.current.on("getMessage", (data) => {
         setArrivalMessage({
           senderId: data.senderId,
           text: data.text,
           createdAt: Date.now(),
-          recieverId:data.recieverId
+          recieverId: data.recieverId
         });
-       
-      
+
+
       });
-
-
-    }, []);
-
-
-    const emitMessageRead = (senderId,  recieverId) => {
-      // Emit the "messageRead" event to the server
-      socket.current.emit("messageRead", { senderId, recieverId });
     }
 
-    useEffect(() => {
-      console.log('curururururu',currChat);
-      if(currChat){
-        const otherUserId = currChat.members.find(memberId => memberId !== user._id);
-        console.log('cdfadsf',otherUserId);
-         emitMessageRead(otherUserId,user._id)
-      }
-  }, [currChat,arrivalMessage]);
+
+
+  }, []);
+
+
+  const emitMessageRead = (senderId, recieverId) => {
+    // Emit the "messageRead" event to the server
+    if (socket.current) {
+      socket.current.emit("messageRead", { senderId, recieverId });
+    }
+  }
+
+  useEffect(() => {
+    console.log('curururururu', currChat);
+    if (currChat) {
+      const otherUserId = currChat.members.find(memberId => memberId !== user._id);
+      console.log('cdfadsf', otherUserId);
+      emitMessageRead(otherUserId, user._id)
+    }
+  }, [currChat, arrivalMessage]);
 
 
 
 
   useEffect(() => {
 
- 
-    socket.current.on("userTyping", ({ senderId,recieverId }) => {
+
+    socket.current.on("userTyping", ({ senderId, recieverId }) => {
       if (senderId !== user._id) {
         console.log('inininininin');
-       
-       
-        
+
+
+
         setIsSenderTyping(true);
       } else {
         console.log('ououououou');
-        console.log('currchat when typing',senderId);
+        console.log('currchat when typing', senderId);
         setIsReceiverTyping(true);
-        
+
       }
     });
 
@@ -101,7 +105,7 @@ const ChatWindow = ({ currChat }) => {
     });
 
 
-  },[])
+  }, [])
 
   useEffect(() => {
     socket.current.on("messageReadByRecipient", ({ senderId, recieverId }) => {
@@ -115,11 +119,11 @@ const ChatWindow = ({ currChat }) => {
           return message;
         });
       });
-     
+
     });
 
   }, []);
-  
+
   useEffect(() => {
     if (arrivalMessage && currChat?.members.includes(arrivalMessage.senderId)) {
       setMessages(prev => {
@@ -140,32 +144,34 @@ const ChatWindow = ({ currChat }) => {
 
 
   useEffect(() => {
-    
-    socket.current.on('getUsers', users => {
-      console.log('userrrrrrsddd');
-      console.log(users);
-    
-    })
+    if (socket.current) {
+      socket.current.on('getUsers', users => {
+        console.log('userrrrrrsddd');
+        console.log(users);
+
+      })
+    }
+
   }, [socket])
 
 
   useEffect(() => {
-    
+
 
     if (currChat) {
       setLoading(true)
-      messageReaded(currChat._id,user._id)
+      messageReaded(currChat._id, user._id)
         .then((response) => {
           setMessages(response.data);
-          
+
           const otherUserId = currChat.members.find(memberId => memberId !== user._id);
           getSingleUser(otherUserId)
             .then((response) => {
-      //oi for inticaton
+              //oi for inticaton
               emitMessageRead(otherUserId, user._id);
-             
+
               setSender(response)
-               setConv(currChat.members)
+              setConv(currChat.members)
               setLoading(false)
             })
             .catch((error) => {
@@ -184,18 +190,18 @@ const ChatWindow = ({ currChat }) => {
       conversationId: currChat._id,
       senderId: user._id,
       text: newMessage,
-      recieverId:recieverId
+      recieverId: recieverId
     }
-   
+
     //socket sending message
 
-   
+
     sendNewMessage(data)
       .then((response) => {
         socket.current.emit("sendMessage", {
-      
+
           senderId: user._id,
-    
+
           recieverId: recieverId,
           text: newMessage
         })
@@ -215,8 +221,8 @@ const ChatWindow = ({ currChat }) => {
       })
   }
 
-;
-  
+
+
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -225,8 +231,8 @@ const ChatWindow = ({ currChat }) => {
   }, [messages])
 
   const handleTyping = () => {
-    
-  
+
+
     const recieverId = currChat.members.find(member => member !== user._id);
     if (sender) {
       socket.current.emit("typing", { senderId: sender._id, recieverId: recieverId });
@@ -241,15 +247,40 @@ const ChatWindow = ({ currChat }) => {
   };
 
 
+  function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomString = '';
+
+    for (let i = 0; i < length; i++) {
+      randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    return randomString;
+  }
+
+  //video call..........................
+  const handleVideoCall = () => {
+    const recieverId = currChat.members.find(member => member !== user._id);
+
+    const roomId = generateRandomString(5);
+    socket.current.emit('videoCallEmit', { recieverId, userName: user.userName, profilePic: user.profilePic, roomId })
+    console.log('ssss');
+    navigate(`/room/${roomId}`)
+  }
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  };
+
   if (loading) {
     return <Spinner />
   }
 
   return (
     <div className="relative h-[90vh] pr-0 flex flex-col flex-1" style={{ marginTop: '4rem', overflowY: 'hidden' }}>
-    <div className="z-20 mx-0 flex flex-grow-0 flex-shrink-0 w-full pr-0 bg-white border-b">
+      <div className="z-20 mx-0 flex flex-grow-0 flex-shrink-0 w-full pr-0 bg-white border-b">
 
-        {sender && ( 
+        {sender && (
           <>
             <div className="w-12 h-12 mx-4 my-2 bg-blue-500 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer"
               style={{ backgroundImage: `url(${sender.profilePic})` }}>
@@ -257,97 +288,102 @@ const ChatWindow = ({ currChat }) => {
             <div className="flex flex-col justify-center flex-1 overflow-hidden cursor-pointer">
               <div className="overflow-hidden text-base font-medium leading-tight text-gray-600 whitespace-no-wrap">{sender.userName}</div>
               {sender && isReceiverTyping ? (
-  <div className="overflow-hidden text-sm font-medium leading-tight text-gray-600 whitespace-no-wrap">Typing...</div>
-) : (
-  null
-)}
+                <div className="overflow-hidden text-sm font-medium leading-tight text-gray-600 whitespace-no-wrap">Typing...</div>
+              ) : (
+                null
+              )}
 
             </div>
-            <div className="relative hidden w-48 pl-2 my-3 border-l-2 border-blue-500 cursor-pointer lg:block">
-              <div className="text-base font-medium text-blue-500">Pinned message</div>
-              <div className="text-sm font-normal text-gray-800">Today star contest</div>
-            </div>
-            <button className="flex self-center p-2 ml-2 text-gray-500 rounded-full focus:outline-none hover:text-gray-600 hover:bg-gray-300">
-              <svg className="w-6 h-6 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path fillRule="nonzero" d="M11,20 L13,20 C13.5522847,20 14,20.4477153 14,21 C14,21.5128358 13.6139598,21.9355072 13.1166211,21.9932723 L13,22 L11,22 C10.4477153,22 10,21.5522847 10,21 C10,20.4871642 10.3860402,20.0644928 10.8833789,20.0067277 L11,20 L13,20 L11,20 Z M3.30352462,2.28241931 C3.6693482,1.92735525 4.23692991,1.908094 4.62462533,2.21893936 L4.71758069,2.30352462 L21.2175807,19.3035246 C21.6022334,19.6998335 21.5927842,20.332928 21.1964754,20.7175807 C20.8306518,21.0726447 20.2630701,21.091906 19.8753747,20.7810606 L19.7824193,20.6964754 L18.127874,18.9919007 L18,18.9999993 L4,18.9999993 C3.23933773,18.9999993 2.77101468,18.1926118 3.11084891,17.5416503 L3.16794971,17.4452998 L5,14.6972244 L5,8.9999993 C5,7.98873702 5.21529462,7.00715088 5.62359521,6.10821117 L3.28241931,3.69647538 C2.89776658,3.3001665 2.90721575,2.66707204 3.30352462,2.28241931 Z M7.00817933,8.71121787 L7,9 L7,14.6972244 C7,15.0356672 6.91413188,15.3676193 6.75167088,15.6624466 L6.66410059,15.8066248 L5.86851709,17 L16.1953186,17 L7.16961011,7.7028948 C7.08210009,8.02986218 7.02771758,8.36725335 7.00817933,8.71121787 Z M12,2 C15.7854517,2 18.8690987,5.00478338 18.995941,8.75935025 L19,9 L19,12 C19,12.5522847 18.5522847,13 18,13 C17.4871642,13 17.0644928,12.6139598 17.0067277,12.1166211 L17,12 L17,9 C17,6.23857625 14.7614237,4 12,4 C11.3902636,4 10.7970241,4.10872043 10.239851,4.31831953 C9.72293204,4.51277572 9.14624852,4.25136798 8.95179232,3.734449 C8.75733613,3.21753002 9.01874387,2.6408465 9.53566285,2.4463903 C10.3171048,2.15242503 11.1488212,2 12,2 Z" />
-              </svg>
+
+
+
+            <button onClick={handleVideoCall} className="flex self-center p-2 ml-2 text-gray-500 rounded-full focus:outline-none hover:text-gray-600 hover:bg-gray-300">
+              <FcVideoCall className="w-8 h-8 mr-5" />
             </button>
-            <button className="flex self-center p-2 ml-2 text-gray-500 rounded-full focus:outline-none hover:text-gray-600 hover:bg-gray-300">
-              <svg className="w-6 h-6 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path fillRule="nonzero" d="M9.5,3 C13.0898509,3 16,5.91014913 16,9.5 C16,10.9337106 15.5358211,12.2590065 14.7495478,13.3338028 L19.7071068,18.2928932 C20.0976311,18.6834175 20.0976311,19.3165825 19.7071068,19.7071068 C19.3466228,20.0675907 18.7793918,20.0953203 18.3871006,19.7902954 L18.2928932,19.7071068 L13.3338028,14.7495478 C12.2590065,15.5358211 10.9337106,16 9.5,16 C5.91014913,16 3,13.0898509 3,9.5 C3,5.91014913 5.91014913,3 9.5,3 Z M9.5,5 C7.01471863,5 5,7.01471863 5,9.5 C5,11.9852814 7.01471863,14 9.5,14 C11.9852814,14 14,11.9852814 14,9.5 C14,7.01471863 11.9852814,5 9.5,5 Z" />
-              </svg>
-            </button>
-            <button type="button" className="flex self-center hidden p-2 ml-2 text-gray-500 rounded-full md:block focus:outline-none hover:text-gray-600 hover:bg-gray-300">
-              <svg className="w-6 h-6 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path fillRule="nonzero" d="M12,16 C13.1045695,16 14,16.8954305 14,18 C14,19.1045695 13.1045695,20 12,20 C10.8954305,20 10,19.1045695 10,18 C10,16.8954305 10.8954305,16 12,16 Z M12,10 C13.1045695,10 14,10.8954305 14,12 C14,13.1045695 13.1045695,14 12,14 C10.8954305,14 10,13.1045695 10,12 C10,10.8954305 10.8954305,10 12,10 Z M12,4 C13.1045695,4 14,4.8954305 14,6 C14,7.1045695 13.1045695,8 12,8 C10.8954305,8 10,7.1045695 10,6 C10,4.8954305 10.8954305,4 12,4 Z" />
-              </svg>
-            </button>
-            <button className="p-2 text-gray-700 flex self-center rounded-full md:hidden focus:outline-none hover:text-gray-600 hover:bg-gray-200">
-              <svg className="w-6 h-6 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                <path fillRule="nonzero" d="M4,16 L20,16 C20.5522847,16 21,16.4477153 21,17 C21,17.5128358 20.6139598,17.9355072 20.1166211,17.9932723 L20,18 L4,18 C3.44771525,18 3,17.5522847 3,17 C3,16.4871642 3.38604019,16.0644928 3.88337887,16.0067277 L4,16 L20,16 L4,16 Z M4,11 L20,11 C20.5522847,11 21,11.4477153 21,12 C21,12.5128358 20.6139598,12.9355072 20.1166211,12.9932723 L20,13 L4,13 C3.44771525,13 3,12.5522847 3,12 C3,11.4871642 3.38604019,11.0644928 3.88337887,11.0067277 L4,11 Z M4,6 L20,6 C20.5522847,6 21,6.44771525 21,7 C21,7.51283584 20.6139598,7.93550716 20.1166211,7.99327227 L20,8 L4,8 C3.44771525,8 3,7.55228475 3,7 C3,6.48716416 3.38604019,6.06449284 3.88337887,6.00672773 L4,6 Z" />
-              </svg>
-            </button>
+
+
+
           </>
         )}
       </div>
 
       <div className="top-0 bottom-0 left-0 right-0 flex flex-col flex-1 overflow-hidden bg-transparent bg-bottom bg-cover">
-    <div className="self-center flex-1 w-full max-w-xl overflow-y-scroll">
-    <div className="relative flex flex-col flex-1 overflow-hidden bg-transparent bg-bottom bg-cover" style={{ overflowY: 'scroll' }}>
-      {currChat ? (
-        <>
-  <div className="self-center px-2 py-1 mx-0 my-1 text-sm text-gray-700 bg-white border border-gray-200 rounded-full shadow rounded-tg">Channel was created</div>
-  <div className="self-center px-2 py-1 mx-0 my-1 text-sm text-gray-700 bg-white border border-gray-200 rounded-full shadow rounded-tg">{ formatDate(currChat.createdAt)}</div>
-  </>
-) : <div className="flex flex-col justify-center items-center h-full" style={{ marginTop: '12rem' }}>
-  <BsChatDots className="w-16 h-16 text-gray-400 mb-4" />
-  <h2 className="text-lg font-bold mb-2">Your messages</h2>
-  <p className="text-sm text-gray-600">Send private photos and messages to a friend or group.</p>
-  <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4">Send message</button>
-</div>
+        <div className="self-center flex-1 w-full max-w-xl overflow-y-scroll">
+          <div className="relative flex flex-col flex-1 overflow-hidden bg-transparent bg-bottom bg-cover" style={{ overflowY: 'scroll' }}>
+            {currChat ? (
+              <>
+                <div className="self-center px-2 py-1 mx-0 my-1 text-sm text-gray-700 bg-white border border-gray-200 rounded-full shadow rounded-tg">Channel was created</div>
+                <div className="self-center px-2 py-1 mx-0 my-1 text-sm text-gray-700 bg-white border border-gray-200 rounded-full shadow rounded-tg">{formatDate(currChat.createdAt)}</div>
+              </>
+            ) : <div className="flex flex-col justify-center items-center h-full" style={{ marginTop: '12rem' }}>
+              <BsChatDots className="w-16 h-16 text-gray-400 mb-4" />
+              <h2 className="text-lg font-bold mb-2">Your messages</h2>
+              <p className="text-sm text-gray-600">Send private photos and messages to a friend or group.</p>
+              <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4">Send message</button>
+            </div>
 
 
-}
+            }
 
 
-{messages.map((message, index) => (
-      <Message
-        key={index}
-        index={index}
-        messageId={message._id}
-        createdAt={message.createdAt}
-        text={message.text}
-        sender={sender}
-        user={user}
-        isSender={message.senderId === user._id}
-        isRead={message.isRead}
-        allReaded={allReaded}
-        deleteType={message.deleteType}
-        socket={socket.current}
-        message={message}
-      />
-    ))}
-     {sender && isReceiverTyping && (
-      <div className="self-start w-3/4 my-2">
-        <div className="p-4 text-sm bg-white rounded-t-lg rounded-r-lg shadow">
-          Typing......
+            {messages.map((message, index) => (
+              <Message
+                key={index}
+                index={index}
+                messageId={message._id}
+                createdAt={message.createdAt}
+                text={message.text}
+                sender={sender}
+                user={user}
+                isSender={message.senderId === user._id}
+                isRead={message.isRead}
+                allReaded={allReaded}
+                deleteType={message.deleteType}
+                socket={socket.current}
+                message={message}
+              />
+            ))}
+            {sender && isReceiverTyping && (
+              <div className="self-start w-3/4 my-2">
+                <div className="p-4 text-sm bg-white rounded-t-lg rounded-r-lg shadow">
+                  Typing......
+                </div>
+              </div>
+            )}
+            {/* This empty div ensures that the scrollRef always points to the bottom */}
+            <div ref={scrollRef}></div>
+          </div>
+
         </div>
-      </div>
-    )}
-    {/* This empty div ensures that the scrollRef always points to the bottom */}
-    <div ref={scrollRef}></div>
-  </div>
-
-        </div>
+        <span>
+          {showEmojiPicker && (
+            <Picker
+              onEmojiSelect={(emoji) => {
+                setNewMessage((prevMessage) => prevMessage + emoji.native);
+              }}
+              style={{ position: "fixed", bottom: "500px", right: "10px", backgroundColor: "white" }}
+            />
+          )}
+        </span>
         <div className="relative flex items-center self-center w-full max-w-xl p-4 overflow-hidden text-gray-600 focus-within:text-gray-400">
           <div className="w-full">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-6">
-              <button type="submit" className="p-1 focus:outline-none focus:shadow-none">
-                <svg className="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                  <path fillRule="nonzero" d="M9.5,3 C13.0898509,3 16,5.91014913 16,9.5 C16,10.9337106 15.5358211,12.2590065 14.7495478,13.3338028 L19.7071068,18.2928932 C20.0976311,18.6834175 20.0976311,19.3165825 19.7071068,19.7071068 C19.3466228,20.0675907 18.7793918,20.0953203 18.3871006,19.7902954 L18.2928932,19.7071068 L13.3338028,14.7495478 C12.2590065,15.5358211 10.9337106,16 9.5,16 C5.91014913,16 3,13.0898509 3,9.5 C3,5.91014913 5.91014913,3 9.5,3 Z M9.5,5 C7.01471863,5 5,7.01471863 5,9.5 C5,11.9852814 7.01471863,14 9.5,14 C11.9852814,14 14,11.9852814 14,9.5 C14,7.01471863 11.9852814,5 9.5,5 Z" />
+
+            <span className="absolute inset-y-0 left-0 flex items-center pl-5">
+              <button
+                onClick={toggleEmojiPicker}
+                className="p-1 focus:outline-none focus:shadow-none hover:text-blue-500"
+              >
+                <svg className="w-6 h-6 fill-current text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill="none" d="M0 0h24v24H0z" />
+                  <circle cx="12" cy="12" r="10" fill="#FFEB3B" />
+                  <path d="M8 14h8v1.5H8z" />
+                  <circle cx="9" cy="10" r="1" />
+                  <circle cx="15" cy="10" r="1" />
+                  <path fill="none" d="M0 0h24v24H0z" />
                 </svg>
               </button>
             </span>
+
             <span className="absolute inset-y-0 right-0 flex items-center pr-6">
               <button type="submit" onClick={handleSend}
                 className="p-1 focus:outline-none focus:shadow-none hover:text-blue-500">

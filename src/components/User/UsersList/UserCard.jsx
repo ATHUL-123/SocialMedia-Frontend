@@ -28,12 +28,12 @@ const UserCard = ({ user }) => {
   };
 
   const handleProfile = () => {
-    console.log('hai');
+ 
     navigate(`/user/${user._id}`);
   };
 
   return (
-    <div className="flex items-center w-fullv py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-4">
+    <div className="flex items-center w-fullv py-2 transition-colors duration-200 dark:hover:bg-gray-800 gap-x-2">
   <div className="relative">
     <img
       onClick={handleProfile}
@@ -41,7 +41,7 @@ const UserCard = ({ user }) => {
       src={user.profilePic}
       alt=""
     />
-    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border border-white rounded-full"></div>
+    {/* <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border border-white rounded-full"></div> */}
   </div>
 
   <div className="text-left rtl:text-right flex-grow max-w-36"> {/* Adjust the max-width as needed */}

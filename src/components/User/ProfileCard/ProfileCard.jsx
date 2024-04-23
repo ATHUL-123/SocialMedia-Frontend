@@ -12,6 +12,7 @@ import KYCForm from '../Razorpay/KycForm';
 import AddVerifiedModal from '../Razorpay/VerifyModal';
 import RemoveConfirm from '../Modals/RemoveVerify';
 import { getConnectionCount } from '../../../services/User/apiMethods';
+import { getRequests } from '../../../services/User/apiMethods';
 
 
 function ProfileCard({user,posts}) {
@@ -29,7 +30,9 @@ function ProfileCard({user,posts}) {
     const [openKyc,setOpenKyc]= useState(false)
     const [followerCount,setFollowerCount] = useState(0)
     const [followingCount,setFollowingCount]=useState(0)
-
+    const [requestCount,setRequestCount] = useState(0)
+    const [loading, setLoading] = useState(false);
+    const [requests, setRequests] = useState([]);
   useEffect(()=>{
     getConnectionCount(user._id)
      .then((response)=>{
@@ -38,6 +41,28 @@ function ProfileCard({user,posts}) {
       setFollowingCount(response.followingCount)
      })
   },[])
+
+
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await getRequests();
+        console.log('resss');
+        setRequests(response);
+        setRequestCount(response.length)
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false); // Always set loading to false, even in case of error
+      }
+    };
+  
+    fetchData();
+  }, []);
 
     
     const toggleDropdown = () => {
@@ -143,9 +168,12 @@ function ProfileCard({user,posts}) {
             <div className="relative inline-block">
               {/* Dropdown toggle button */}
               <button
-                onClick={toggleDropdown}
-                className="relative z-10 block p-2 text-gray-700 bg-white border border-transparent rounded-md focus:border-blue-500 focus:ring-opacity-40 focus:ring-blue-300 focus:outline-none"
-              >
+  onClick={toggleDropdown}
+  className="relative z-0 block p-2 text-gray-700 bg-white border border-transparent rounded-md focus:border-blue-500 focus:ring-opacity-40 focus:ring-blue-300 focus:outline-none"
+  style={{ zIndex: 1 }} // Add this style to set the z-index
+>
+
+
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-5 h-5"
@@ -216,7 +244,13 @@ function ProfileCard({user,posts}) {
   <div className="flex flex-wrap items-center">
     <a onClick={() => setFollowingModal(true)} className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">{followingCount} Following</a>
     <a onClick={()=>setFollowersModal(true)} className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">{followerCount} Followers</a>
-    <a onClick={()=>setRequest(true)}  className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">Request</a>
+  {requestCount>0 &&  <div style={{position: 'relative'}}>
+  <a onClick={()=>setRequest(true)}  className="mr-3 mb-2 inline-flex items-center justify-center text-secondary-inverse rounded-full bg-neutral-100 hover:bg-neutral-200 transition-all duration-200 ease-in-out px-3 py-1 text-sm font-medium leading-normal cursor-pointer">Request</a>
+  <div style={{position: 'absolute', bottom: '0px', right: '-4px', width: '20px', height: '20px', borderRadius: '50%', backgroundImage: 'linear-gradient(135deg, #ff6ec4, #7873f5)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px'}}>{requestCount}</div>
+</div>}
+
+
+
   </div>
 </div>
 
@@ -224,7 +258,7 @@ function ProfileCard({user,posts}) {
     </div>
   </div>
 </div>
-{request && <RequestModal isOpen={request} closeModal={()=>setRequest(false)}/>}
+{request && <RequestModal setRequests={setRequests} setRequestCount={setRequestCount} loading={loading} request={requests} isOpen={request} closeModal={()=>setRequest(false)}/>}
 {openSettings && <SettingsModal isOpen={openSettings} closeModal={() => setOpenSettings(false)} user={user} />}
 
       <EditProfile isOpen={isEditModal} toggleModal={toggleModal}/>

@@ -4,6 +4,7 @@ import { fetchFollowers } from '../../../services/User/apiMethods';
 import ListCard from '../ListCard/ListCard';
 import { useSelector } from 'react-redux';
 import './FollowerModal.css'
+
 function FollowerList({ isOpen, toggleModal }) {
   const modalRoot = document.getElementById('portal-root');
   const [loading, setLoading] = useState(false);
@@ -11,17 +12,18 @@ function FollowerList({ isOpen, toggleModal }) {
   const [page, setPage] = useState(1);
   const [totalUsers, setTotalUsers] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]); // Initialize filteredUsers
   const usersPerPage = 5;
-  const {user} = useSelector((state)=>state.auth)
+  const { user } = useSelector((state) => state.auth);
   const userId = user._id;
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-      
         const { followers, totalCount } = await fetchFollowers(page, usersPerPage);
         setUsers([...users, ...followers]);
-        console.log(totalCount);
+        setFilteredUsers([...filteredUsers, ...followers]); // Update filteredUsers
         setTotalUsers(totalCount);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -30,16 +32,24 @@ function FollowerList({ isOpen, toggleModal }) {
     };
 
     fetchData();
-  }, [page, usersPerPage, searchQuery]);
+  }, [page, usersPerPage]);
 
   const handleViewMore = () => {
     setPage(prevPage => prevPage + 1);
   };
 
   const handleSearchChange = event => {
-    setSearchQuery(event.target.value);
-    setPage(1); // Reset page when search query changes
-    setUsers([]); // Clear existing users when search query changes
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+    if (query === '') {
+      setFilteredUsers(users); // Reset filteredUsers to all users when the search query is empty
+    } else {
+      // Filter the users based on the search query
+      const filteredUsers = users.filter(user => {
+        return user.userName.toLowerCase().includes(query);
+      });
+      setFilteredUsers(filteredUsers); // Update filteredUsers with the new filtered list
+    }
   };
 
   useEffect(() => {
@@ -67,7 +77,7 @@ function FollowerList({ isOpen, toggleModal }) {
           <div className="max-h-full overflow-y-auto">
             <div className="mt-5 text-center">
               <h3 className="text-lg font-medium text-gray-800 dark:text-white" id="modal-title">
-               Followers
+                Followers
               </h3>
 
               {/* Search field */}
@@ -81,14 +91,12 @@ function FollowerList({ isOpen, toggleModal }) {
 
               {/* List */}
               <div className="max-h-60 overflow-y-auto hide-scrollbar">
-  <ul className="text-gray-500 dark:text-gray-400 text-left">
-    {users.map(user => (
-      <ListCard hideButton={true} key={user.id} user={user} userId={userId} />
-    ))}
-  </ul>
-</div>
-
-
+                <ul className="text-gray-500 dark:text-gray-400 text-left">
+                  {filteredUsers.map(user => (
+                    <ListCard hideButton={true} key={user.id} user={user} userId={userId} />
+                  ))}
+                </ul>
+              </div>
 
               {loading && <p>Loading...</p>}
 

@@ -150,3 +150,61 @@ export const acceptKyc=(kycId)=>{
        }
     })
 }
+
+export const fetchCounts=()=>{
+
+   
+    return new Promise((resolve,reject)=>{
+       try {
+           apiCall('get',adminUrl.fetchCounts)
+           .then((response) => {
+               resolve(response);
+           })
+           .catch((error) => {
+               console.log(error);
+               reject(error); 
+           });
+       } catch (error) {
+           reject(error)
+       }
+    })
+}
+
+export const getAvg=()=>{
+
+   
+    return new Promise((resolve,reject)=>{
+       try {
+           apiCall('get',adminUrl.fetchAvg)
+           .then((response) => {
+               resolve(response);
+           })
+           .catch((error) => {
+               console.log(error);
+               reject(error); 
+           });
+       } catch (error) {
+           reject(error)
+       }
+    })
+}
+
+
+export const getChartData=(year)=>{
+
+   
+    return new Promise((resolve,reject)=>{
+       try {
+           apiCall('get',adminUrl.fetchChartData(year))
+           .then((response) => {
+               resolve(response);
+           })
+           .catch((error) => {
+               console.log(error);
+               reject(error); 
+           });
+       } catch (error) {
+           reject(error)
+       }
+    })
+}

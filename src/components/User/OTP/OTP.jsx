@@ -61,11 +61,11 @@ useEffect(() => {
     e.preventDefault();
     // Combine OTP digits into a single string
     const otpCode = Object.values(otp).join('');
-    console.log(otpCode);
+ 
     verifyOtp(unVarified.email, otpCode)
       .then((response) => {
         toast.success('success');
-        console.log(response);
+  
         navigate('/login');
       })
       .catch((error) => {

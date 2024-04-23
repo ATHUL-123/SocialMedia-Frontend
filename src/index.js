@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import { SocketProvider } from './utils/SocketContext';
+import { RouterProvider } from 'react-router-dom';
+import appRouter from './services/User/routes';
 import App from './App';
 
 import './index.css';
@@ -15,7 +17,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
     <SocketProvider>
+     
       <App />
+     
       </SocketProvider>
     </Provider>
   </React.StrictMode>

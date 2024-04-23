@@ -22,16 +22,14 @@ const Home = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
- const socket = useSocket()
- useEffect(()=>{
-  if(socket.current){
-    console.log('user is added ');
-    socket.current.emit('addUser', user._id)
-  }else{
-    console.log('socket is not connected');
-  }
- 
- },[socket])
+  const socket = useSocket()
+  useEffect(() => {
+    if (socket.current) {
+
+      socket.current.emit('addUser', user._id)
+    }
+
+  }, [socket])
 
   useEffect(() => {
     setLoading(true);
@@ -42,7 +40,7 @@ const Home = () => {
     getAllFollowesPost(page, pageSize)
       .then((response) => {
         // Filter out duplicate posts
-        console.log(response);
+
         setPosts([...posts, ...response]);
         setLoading(false);
       })
@@ -61,8 +59,8 @@ const Home = () => {
     <>
       <div>
         <Header toggleSearch={() => setShowUserList(!showUserList)} />
-        <div className="w-full bg-indigo-100 h-screen flex flex-col md:flex-row justify-center overflow-hidden">
-          <UsersList /> 
+        <div className=" px-10 w-full bg-white h-screen flex flex-col md:flex-row justify-center overflow-hidden">
+          <UsersList />
           <div className="flex-1 p-5 antialiased overflow-y-auto custom-scrollbar">
             <div className="mt-3 flex flex-col items-center">
               {posts.length > 0 ? (
@@ -73,13 +71,13 @@ const Home = () => {
             </div>
 
             {loading && (
-  <div className="mt-5 flex flex-col items-center">
-    {[...Array(5)].map((_, index) => (
-      <PostShimmer key={index} />
-    ))}
-  </div>
-)}
-              
+              <div className="mt-5 flex flex-col items-center">
+                {[...Array(5)].map((_, index) => (
+                  <PostShimmer key={index} />
+                ))}
+              </div>
+            )}
+
             {!loading && posts.length > 0 && (
               <div className="flex justify-center mt-4">
                 <button

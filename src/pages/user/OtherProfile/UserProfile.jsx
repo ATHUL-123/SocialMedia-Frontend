@@ -12,7 +12,7 @@ useEffect(()=>{
   if(user){
     getConnectionCount(user._id)
     .then((response)=>{
-     console.log(response);
+ 
      setFollowerCount(response.followersCount)
      setFollowingCount(response.followingCount)
     })
@@ -23,10 +23,10 @@ useEffect(()=>{
 
   // Determine the initial state of isFollowing based on the value of following
   if (following === 'requested') {
-    console.log(following);
+
     initialFollowingState = 'requested';
   } else {
-    console.log(following);
+
     initialFollowingState = following;
   }
 

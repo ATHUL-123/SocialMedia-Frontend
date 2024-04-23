@@ -1,37 +1,38 @@
-import { createBrowserRouter,  } from "react-router-dom";
-import React from "react";
+// src/components/AdminRoutes.js
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import AdminLogin from '../../pages/admin/Login/adminLogin';
+import Dashboard from '../../pages/admin/Dashboard/Dashboard';
+import Reports from '../../pages/admin/Reports/Reports';
+import UserList from '../../pages/admin/UserList.jsx/UserList';
+import KycVerifications from '../../pages/admin/Verifications/Verification';
+import ErrorBoundary from '../../components/User/Error/ErrorBoundary';
+import Error from '../../components/User/Error/Error';
+const AdminRoutes = ({ admin }) => (
 
+  <ErrorBoundary>
+  <Routes>
+   
+    <Route path='/' element={admin && admin.role=='Admin' ? <Navigate to='/admin/dashboard'/> : <AdminLogin /> } />
+    <Route
+      path='/userlist'
+      element={admin && admin.role === 'Admin' ? <UserList /> : <Navigate to='/admin' />}
+    />
+    <Route
+      path='/dashboard'
+      element={admin && admin.role === 'Admin' ? <Dashboard /> : <Navigate to='/admin' />}
+    />
+    <Route
+      path='/reports'
+      element={admin && admin.role === 'Admin' ? <Reports /> : <Navigate to='/admin' />}
+    />
+    <Route
+      path='/kyc'
+      element={admin && admin.role === 'Admin' ? <KycVerifications/> : <Navigate to='/admin' />}
+    />
+   <Route path='*' element={<Error />} />
+  </Routes>
+  </ErrorBoundary>
+);
 
-import useAdmin from "../../components/Hooks/useAdmin";
-import AdminLogin from "../../pages/admin/Login/adminLogin";
-import Dashboard from "../../pages/admin/Dashboard/Dashboard";
-import Reports from "../../pages/admin/Reports/Reports";
-import KycVerifications from "../../pages/admin/Verifications/Verification";
-import Error from "../../components/User/Error/Error";
-
-export const adminRouter ={
-    path:'/admin',
-    element :<Dashboard/>,
-    errorElement:<Error/>,
-    children:[
-        {
-            path:'/admin',
-            element:<Dashboard/>
-        },
-        {
-            path:'/admin/reports',
-            element:<Reports/>
-        },
-        {
-            path:'/admin/kyc',
-            element:<KycVerifications/>
-        }
-    ]
-}
-
-export const adminLoginRouter ={
-    path:'/admin/login',
-    element:<AdminLogin/>
-}
-
-export default adminRouter
+export default AdminRoutes;

@@ -5,7 +5,7 @@ function RejectReasonForm({ kyc, isOpen, onClose, handleReject }) {
 
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent default form submission behavior
-    console.log('add');
+
     handleReject(kyc._id, reason);
   };
 

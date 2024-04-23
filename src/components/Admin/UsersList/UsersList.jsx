@@ -7,27 +7,27 @@ import Spinner from '../../User/Spinner/Spinner';
 
 function UsersList() {
     const dispatch = useDispatch()
-    
+
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [usersPerPage] = useState(10); // Number of users per page
-    const [total,setTotal] = useState(0)
-    
+    const [total, setTotal] = useState(0)
+
     useEffect(() => {
         getAllUsers(currentPage, usersPerPage) // Pass currentPage and usersPerPage
             .then(async (response) => {
-                setUsers([...users,...response.users]);
+                setUsers([...users, ...response.users]);
                 setTotal(response.totalCount);
-                console.log(response);
+               
                 setLoading(false);
             })
             .catch((error) => {
-                console.log(error);
+              
                 setLoading(false);
             });
     }, [dispatch, currentPage, usersPerPage]);
-    
+
 
     const updateUserStatus = (userId, newStatus) => {
         const updatedUsers = users.map(user => {
@@ -38,25 +38,25 @@ function UsersList() {
         });
         setUsers(updatedUsers);
     };
- 
+
     // Pagination logic
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
- 
+
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     if (loading) {
-       return <Spinner/>; // Show loading indicator while fetching data
+        return <Spinner />; // Show loading indicator while fetching data
     }
-    
+
     return (
         <section className="container px-4 mx-auto">
             <div className="flex items-center gap-x-3">
                 <h2 className="text-lg font-medium text-gray-800 dark:text-white">USER MANAGEMENT</h2>
                 <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">100 users</span>
             </div>
-            
+
             <div className="flex flex-col mt-6">
                 <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -87,7 +87,7 @@ function UsersList() {
                                             </div>
                                         </th>
                                         <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Action</th>
-                                      
+
                                         <th scope="col" className="relative py-3.5  px-4">
                                             <span className="sr-only">Edit</span>
                                         </th>
@@ -95,7 +95,7 @@ function UsersList() {
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
                                     {currentUsers.map((user, index) => (
-                                        <TableData key={index} user={user} updatedUsers={updateUserStatus}/>
+                                        <TableData key={index} user={user} updatedUsers={updateUserStatus} />
                                     ))}
                                 </tbody>
                             </table>
@@ -104,34 +104,34 @@ function UsersList() {
                 </div>
             </div>
             <div className="flex mt-5">
-            <button 
-    className={`flex items-center px-4 py-2 mx-1 text-gray-500 bg-white rounded-md cursor-pointer dark:bg-gray-800 dark:text-gray-600 ${currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-    onClick={() => setCurrentPage(currentPage - 1)}
-    disabled={currentPage === 1}
->
-    Previous
-</button>
+                <button
+                    className={`flex items-center px-4 py-2 mx-1 text-gray-500 bg-white rounded-md cursor-pointer dark:bg-gray-800 dark:text-gray-600 ${currentPage === 1 ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </button>
 
-  
 
-    {Array.from({ length: Math.ceil(total / usersPerPage) }).map((_, index) => (
-        <button 
-            key={index} 
-            className={`items-center px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:flex dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200 ${index + 1 === currentPage ? '' : 'hidden'}`}
-            onClick={() => setCurrentPage(index + 1)}
-        >
-            {index + 1}
-        </button>
-    ))}
 
-    <button 
-        className="flex items-center px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200"
-        onClick={() => setCurrentPage(currentPage + 1)}
-        disabled={currentPage === Math.ceil(total / usersPerPage)} // Disable the button if currentPage is the last page
-    >
-        Next
-    </button>
-</div>
+                {Array.from({ length: Math.ceil(total / usersPerPage) }).map((_, index) => (
+                    <button
+                        key={index}
+                        className={`items-center px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:flex dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200 ${index + 1 === currentPage ? '' : 'hidden'}`}
+                        onClick={() => setCurrentPage(index + 1)}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+
+                <button
+                    className="flex items-center px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={currentPage === Math.ceil(total / usersPerPage)} // Disable the button if currentPage is the last page
+                >
+                    Next
+                </button>
+            </div>
 
         </section>
     );

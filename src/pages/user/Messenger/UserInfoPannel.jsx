@@ -2,17 +2,17 @@ import React,{useState,useEffect} from 'react';
 import { getSingleUser } from '../../../services/User/apiMethods';
 import {useSelector} from 'react-redux'
 
-const UserInfoPanel = ({currChat,toggleSidebar}) => {
+const UserInfoPanel = ({currChat,toggleSidebar,onlineUsers}) => {
     const [convUser,setConvUser] = useState('')
     const {user} = useSelector((state)=>state.auth)
-    
+    const [isOnline, setIsOnline] = useState(false);
     useEffect(()=>{
      if(currChat){
         const otherUserId = currChat.members.find(memberId => memberId !== user._id);
         getSingleUser(otherUserId).then((response)=>{
           setConvUser(response)
-        
-          
+
+          setIsOnline(onlineUsers.some(user => user.userId === otherUserId));
         }).catch((error)=>{
             console.log(error);
         })
@@ -52,7 +52,7 @@ const UserInfoPanel = ({currChat,toggleSidebar}) => {
           </button>
         </div>
         <p className="text-lg font-semibold text-center text-gray-800">{convUser.name}</p>
-        <p className="text-sm font-medium text-center text-blue-500">{convUser.online ? 'online' : 'offline'}</p>
+        <p className="text-sm font-medium text-center text-blue-500">{isOnline ? 'online' : 'offline'}</p>
       </div>
       <div className="flex items-center w-full px-3 mt-6">
         <div className="px-2 text-gray-500 rounded-full hover:text-gray-600">

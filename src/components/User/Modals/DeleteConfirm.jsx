@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { getPost } from '../../../features/post/postSlice';
 import { useDispatch } from 'react-redux';
 
-function DeleteConfirm({ isOpen, onClose ,postId }) {
+function DeleteConfirm({ isOpen, onClose, postId }) {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const dispatch = useDispatch()
 
@@ -13,21 +13,21 @@ function DeleteConfirm({ isOpen, onClose ,postId }) {
     setIsModalOpen(!isModalOpen);
     onClose();
   };
- 
-    const deleteOne =(postId)=>{
+
+  const deleteOne = (postId) => {
     try {
-        
-        deletePost(postId)
-          .then((response) => {
-            console.log(response);
-            dispatch(getPost())
-          })
-          .catch((error) => {
-            toast.error(error);
-          })
-          
-          setIsModalOpen(!isModalOpen);
-          onClose();
+
+      deletePost(postId)
+        .then((response) => {
+
+          dispatch(getPost())
+        })
+        .catch((error) => {
+          toast.error(error);
+        })
+
+      setIsModalOpen(!isModalOpen);
+      onClose();
     } catch (error) {
       toast.error(error)
     }
@@ -51,11 +51,11 @@ function DeleteConfirm({ isOpen, onClose ,postId }) {
           </div>
 
           <div className="mt-4 text-center">
-  <h3 className="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">Delete Post</h3>
-  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
-    Are you sure you want to delete this post? This action cannot be undone.
-  </p>
-</div>
+            <h3 className="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">Delete Post</h3>
+            <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+              Are you sure you want to delete this post? This action cannot be undone.
+            </p>
+          </div>
 
 
           <div className="mt-6 flex justify-center">
@@ -63,7 +63,7 @@ function DeleteConfirm({ isOpen, onClose ,postId }) {
               Cancel
             </button>
 
-            <button onClick={()=>deleteOne(postId)} className="px-4 py-2 text-sm btn-red font-medium tracking-wide text-red capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:w-auto sm:mt-0 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+            <button onClick={() => deleteOne(postId)} className="px-4 py-2 text-sm btn-red font-medium tracking-wide text-red capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:w-auto sm:mt-0 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
               Delete
             </button>
           </div>
@@ -71,7 +71,7 @@ function DeleteConfirm({ isOpen, onClose ,postId }) {
       </div>
     </>,
     document.getElementById('portal-root')
-   
+
   );
 }
 

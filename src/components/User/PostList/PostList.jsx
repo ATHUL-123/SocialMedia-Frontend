@@ -4,14 +4,18 @@ import { LikePost, unLikePost,savePost } from '../../../services/User/apiMethods
 import { format } from 'date-fns';
 import DropdownMenu from './DropDown'; // Import the DropdownMenu component
 import CommentModal from '../Comments/Comment';
+import { useSocket } from '../../../utils/SocketContext';
 import './PostList.css';
-import { FaThumbsUp, FaCommentAlt, FaShare } from 'react-icons/fa';
+import { BsSave2,BsSave2Fill } from "react-icons/bs";
+import { useSelector } from 'react-redux';
 import { FiHeart } from "react-icons/fi";
 import { RiHeartFill } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
 import LikedUsers from '../LikedUsers/LikedUsers';
-
+import { GoCommentDiscussion } from "react-icons/go";
 const PostList = ({ post }) => {
+  const {user} = useSelector((state)=>state.auth)
+  const socket =useSocket()
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [totalLikes, setTotalLikes] = useState(post.likes.length);
   const [dropDown, setDropDown] = useState(false);
@@ -25,17 +29,18 @@ const PostList = ({ post }) => {
   };
 
   useEffect(()=>{
-    console.log('isisi');
+  
     console.log(post);
   },[])
 
   const handleLike = () => {
     const newLikeState = !isLiked;
     setIsLiked(newLikeState);
-
+    
     LikePost(post._id)
       .then(response => {
         setTotalLikes(totalLikes + 1);
+        socket.current.emit('notification-sent',{message:'Liked your Post',senderId:user._id,recieverId:post.userId._id})
       })
       .catch(error => {
         setIsLiked(!newLikeState);
@@ -94,7 +99,7 @@ const PostList = ({ post }) => {
       ></div>
     )}
   
-    <DropdownMenu isOpen={dropDown} toggleDropdown={toggleDropdown} postId={post._id} />
+    <DropdownMenu isOpen={dropDown} toggleDropdown={toggleDropdown} postId={post._id} userId={post.userId._id} />
   
     <div className="flex flex-wrap my-auto justify-between">
     <div className="flex items-center p-3">
@@ -107,6 +112,7 @@ const PostList = ({ post }) => {
    
     <p className="text-lg font-semibold text-gray-800">
       {post.userId.userName}
+    
     </p>
     {post.userId.verified && 
       <svg
@@ -207,8 +213,8 @@ const PostList = ({ post }) => {
         className="w-1/3 hover:bg-gray-100 border-l-4 border-r flex items-center justify-center text-lg text-gray-700 font-semibold cursor-pointer transition-colors duration-300 ease-in-out"
       >
         <span onClick={()=>handlSavePost(post._id)} className="inline-flex items-center">
-          <FaShare className="mr-1" />
-          <span>{saved ?'Unsave' : 'Save'}</span>
+        {saved ? <BsSave2Fill /> :<BsSave2  className="mr-1" />}
+        
         </span>
       </div>
       <div
@@ -216,8 +222,8 @@ const PostList = ({ post }) => {
         className="w-1/3 hover:bg-gray-100 border-l-4 flex items-center justify-center text-lg text-gray-700 font-semibold cursor-pointer transition-colors duration-300 ease-in-out"
       >
         <span className="inline-flex items-center">
-          <FaCommentAlt className="mr-1" />
-          <span>Comment</span>
+          < GoCommentDiscussion className="mr-2" text-lg/>
+          
         </span>
       </div>
     </div>

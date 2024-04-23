@@ -799,3 +799,19 @@ export const getConnectionCount=(userId)=>{
     }
   })
 }
+
+export const getNotificationCount=()=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',userUrl.getNoticationCount)
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

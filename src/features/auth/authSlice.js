@@ -10,6 +10,7 @@ const initialState ={
     isError:false,
     isSuccess:false,
     isLoading:false,
+    // isPrivate:user.isPrivate? true : false,
     unVarified:unVarified ? unVarified :'',
     message:''
     

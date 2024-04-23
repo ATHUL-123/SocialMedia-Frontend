@@ -20,7 +20,7 @@ function KycShimmer() {
           <p className="mt-1 truncate text-sm text-gray-500 bg-gray-200 rounded">&nbsp;</p>
           {/* Shimmer effect for gender */}
           <p className="mt-1 truncate text-sm text-gray-500 bg-gray-200 rounded">&nbsp;</p>
-   
+
         </div>
         {/* Shimmer effect for profile image */}
         <div className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300"></div>

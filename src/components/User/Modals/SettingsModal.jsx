@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 
-const SettingsModal = ({ isOpen, closeModal,user }) => {
+const SettingsModal = ({ isOpen, closeModal, user }) => {
     // State variables to track the state of each setting
     const [notificationsOff, setNotificationsOff] = useState(false);
     const [privateAccount, setPrivateAccount] = useState(user.isPrivate);
@@ -16,7 +16,7 @@ const SettingsModal = ({ isOpen, closeModal,user }) => {
     const handleSaveSettings = async () => {
         try {
             const response = await togglePrivacy(privateAccount);
-            console.log(response);
+          
             dispatch(changePrivacy(response.isPrivate));
             toast.success('Changes saved');
             closeModal();

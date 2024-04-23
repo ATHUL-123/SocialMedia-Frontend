@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useSelector,useDispatch} from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import uploadImage from '../../../utils/cloudinary'
 import { editProfile } from '../../../services/User/apiMethods'
 import { toast } from 'react-toastify'
@@ -12,7 +12,7 @@ function EditProfile({ isOpen, toggleModal }) {
   const [isImageChange, setIsImageChange] = useState(false)
   const [imagePreview, setImagePreview] = useState(user.profilePic)
   const [formData, setFormData] = useState({
-    image:user.profilePic,
+    image: user.profilePic,
     bio: user.bio,
     name: user.name
   })
@@ -41,39 +41,39 @@ function EditProfile({ isOpen, toggleModal }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if(isImageChange){
-        uploadImage(formData.image)
-         .then((imageUrl)=>{
-           const data = {
-            image:imageUrl,
-            bio:formData.bio,
-            name:formData.name
-           }
-       
-         editProfile(data)
-         .then((response) => {
-        dispatch(setUser(response))
-          toast.success(response.message)
+    if (isImageChange) {
+      uploadImage(formData.image)
+        .then((imageUrl) => {
+          const data = {
+            image: imageUrl,
+            bio: formData.bio,
+            name: formData.name
+          }
 
+          editProfile(data)
+            .then((response) => {
+              dispatch(setUser(response))
+              toast.success(response.message)
+
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(error.response.data.message);
+            })
+        })
+    } else {
+      editProfile(formData)
+        .then((response) => {
+          dispatch(setUser(response))
+          toast.success(response.message)
         })
         .catch((error) => {
           console.log(error);
           toast.error(error.response.data.message);
         })
-      })
-    }else {
-      editProfile(formData)
-      .then((response) => {
-       dispatch(setUser(response))
-       toast.success(response.message)
-     })
-     .catch((error) => {
-      console.log(error);
-       toast.error(error.response.data.message);
-     })
     }
 
-     toggleModal()
+    toggleModal()
   }
 
   return (
