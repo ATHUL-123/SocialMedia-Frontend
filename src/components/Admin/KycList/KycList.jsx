@@ -3,6 +3,7 @@ import KycCard from './KycCard';
 import KycShimmer from './KycShimmer';
 import { fetchAllKyc,rejectKyc,acceptKyc } from '../../../services/Admin/apiMethods';
 
+
 const PeopleList = () => {
 
    const [kycs,setKycs]=useState([])

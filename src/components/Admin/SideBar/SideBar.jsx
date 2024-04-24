@@ -14,9 +14,21 @@ const Sidebar = () => {
     }
     return (
         <aside className="flex flex-col w-64 h-screen px-4 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
-            <a href="#">
-                <img className="w-auto h-6 sm:h-7" src="https://merakiui.com/images/logo.svg" alt="" />
-            </a>
+            <div className="flex items-center">
+        <svg
+
+          xmlns="http://www.w3.org/2000/svg"
+          className=" ml-10 h-6 w-6 text-black mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+        <a href="#" className="  text-blue-800 font-semibold text-lg">
+          HYPER EDGE
+        </a>
+      </div>
 
 
 

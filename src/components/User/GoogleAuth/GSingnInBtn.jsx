@@ -26,12 +26,12 @@ function GSingnInBtn() {
   };
 
   return (
-    <div className="flex items-center justify-center mt-5">
-      <button onClick={handleClick} className="px-14 py-1 border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150">
-        <img className="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo" />
-        <span>Login with Google</span>
-      </button>
-    </div>
+
+
+<div onClick={handleClick} className="flex flex-row justify-center items-center space-x-3">
+<a  target="_blank" className="w-11 h-11 items-center justify-center inline-flex rounded-2xl font-bold text-lg bg-blue-100 hover:shadow-lg cursor-pointer transition ease-in duration-300"><img className="w-4 h-4" src="https://cdn-icons-png.freepik.com/256/2504/2504739.png?semt=ais_hybrid" alt="Behance" /></a>
+
+</div>
   );
 }
 
