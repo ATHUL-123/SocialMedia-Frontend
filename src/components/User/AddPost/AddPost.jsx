@@ -104,8 +104,8 @@ const AddPost = ({ onClose }) => {
                                                 </div>
                                             </div>
                                         )}
-                                        <div onClick={toggleTag} className="cursor-pointer absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-                                            <div className="bg-gray-900 bg-opacity-75 text-white p-2 rounded-md cursor-pointer">tag users</div>
+                                        <div  className="cursor-pointer absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+                                            <div  onClick={toggleTag} className="bg-gray-900 bg-opacity-75 text-white p-2 rounded-md cursor-pointer">tag users</div>
                                         </div>
                                     </>
                                 )}

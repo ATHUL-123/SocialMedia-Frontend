@@ -78,7 +78,7 @@ const Home = () => {
               </div>
             )}
 
-            {!loading && posts.length > 0 && (
+            {!loading && posts.length > 0 ? (
               <div className="flex justify-center mt-4">
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none"
@@ -87,7 +87,9 @@ const Home = () => {
                   Load More
                 </button>
               </div>
-            )}
+            ):(<div className="flex justify-center mt-4">
+            <p className="text-gray-500">Follow some friends to see their posts on your feed.</p>
+          </div>)}
           </div>
           {user && <SideProfile user={user} />}
         </div>

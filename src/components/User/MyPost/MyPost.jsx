@@ -85,49 +85,72 @@ function MyPost({ post }) {
                 <div className="relative inline-block">
                   {/* Dropdown toggle button */}
                   <button
-                    onClick={toggleDropdown}
-                    className="relative z-10 block p-2 text-gray-700 bg-white border border-transparent rounded-md dark:text-white focus:border-blue-500 focus:ring-opacity-40 dark:focus:ring-opacity-40 focus:ring-blue-300 dark:focus:ring-blue-400 focus:ring dark:bg-gray-800 focus:outline-none"
-                  >
-                    <svg
-                      className="w-5 h-5 text-gray-800 dark:text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
+  onClick={toggleDropdown}
+  className="relative z-0 block p-2 text-gray-700 bg-white border border-transparent rounded-md focus:border-blue-500 focus:ring-opacity-40 focus:ring-blue-300 focus:outline-none"
+  style={{ zIndex: 1 }} 
+>
+  <svg
+    className={`w-5 h-5 text-${isOpen ? 'white' : 'gray-800'} dark:text-white`}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+  >
+    <path
+      fillRule="evenodd"
+      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+      clipRule="evenodd"
+    />
+  </svg>
+</button>
+
 
                   {/* Dropdown menu */}
                   {isOpen && (
-                    <div
-                      onClick={() => setIsOpen(false)}
-                      className="fixed inset-0 z-10 w-full h-full"
-                    ></div>
-                  )}
-                  <div
-                    className={`absolute right-0 z-20 w-48 py-2 mt-2 origin-top-right bg-white rounded-md shadow-xl dark:bg-gray-800 ${isOpen ? 'block' : 'hidden'
-                      }`}
-                    onMouseEnter={() => setIsOpen(true)} // Show the dropdown when mouse enters
-                    onMouseLeave={() => setIsOpen(false)} // Hide the dropdown when mouse leaves
-                  >
-                    <button
-                      onClick={toggleEditModal}
-                      className="block w-full px-4 py-3 text-sm text-gray-600 capitalize transition-colors text-left duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={toggleModal}
-                      className="block w-full px-4 py-3 text-sm text-red-600 capitalize transition-colors text-left duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      Delete
-                    </button>
-                  </div>
+  <div
+    onClick={() => setIsOpen(false)}
+    className="fixed inset-0 z-10 bg-black bg-opacity-50"
+  ></div>
+)}
+<div
+  className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-80 py-6 px-8 bg-white rounded-md shadow-xl dark:bg-gray-800 ${isOpen ? 'block' : 'hidden'
+    }`}
+>
+  {/* Close button */}
+  <button
+    onClick={() => setIsOpen(false)}
+    className="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-700"
+  >
+    <svg
+      className="w-6 h-6"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M6 18L18 6M6 6l12 12"
+      ></path>
+    </svg>
+  </button>
+  {/* Modal content */}
+  <div className="text-center">
+    <button
+      onClick={toggleEditModal}
+      className="block w-full px-4 py-3 text-sm text-gray-600 capitalize transition-colors text-left duration-300 transform hover:bg-gray-100"
+    >
+      Edit
+    </button>
+    <button
+      onClick={toggleModal}
+      className="block w-full px-4 py-3 text-sm text-red-600 capitalize transition-colors text-left duration-300 transform hover:bg-gray-100"
+    >
+      Delete
+    </button>
+  </div>
+</div>
+
 
                 </div>
               </div>

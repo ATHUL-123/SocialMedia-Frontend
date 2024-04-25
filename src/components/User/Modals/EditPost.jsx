@@ -110,10 +110,7 @@ function EditPost({ isOpen, onClose, post }) {
                     <h3 className="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
                         Edit Post
                     </h3>
-                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                        Your new project has been created. Invite your
-                        team to collaborate on this project.
-                    </p>
+                    
 
                     <form className="mt-4" action="#">
                         {/* Description input */}

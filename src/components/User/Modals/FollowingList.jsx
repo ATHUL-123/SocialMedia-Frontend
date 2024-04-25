@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { fetchFollowing } from '../../../services/User/apiMethods';
 import ListCard from '../ListCard/ListCard';
 import { useSelector } from 'react-redux';
-import './FollowingList.css';
+
 
 function FollowingList({ isOpen, toggleModal }) {
   const modalRoot = document.getElementById('portal-root');
@@ -57,6 +57,10 @@ function FollowingList({ isOpen, toggleModal }) {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return()=>{
       document.body.style.overflow = 'auto';
     }
   }, [isOpen]);
