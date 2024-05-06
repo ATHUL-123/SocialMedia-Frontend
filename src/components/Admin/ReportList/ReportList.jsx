@@ -15,7 +15,7 @@ function ReportList() {
     const fetchReports = (page) => {
         getAllReports(page, limit)
             .then((response) => {
-
+                console.log('erere',response.reports);
                 setReports(response.reports);
                 setTotalPages(Math.ceil(response.totalCount / limit));
             })

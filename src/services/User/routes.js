@@ -12,6 +12,7 @@ import Chat from '../../pages/user/Messenger/Messenger';
 import VideoCall from '../../pages/user/VideoCall/VideoCall';
 import Error from '../../components/User/Error/Error';
 import ErrorBoundary from '../../components/User/Error/ErrorBoundary';
+import ForgotPasswordForm from '../../pages/user/ForgotPassword/ForgotPassword';
 
 const AuthRoutes = ({ user }) => (
   
@@ -26,6 +27,7 @@ const AuthRoutes = ({ user }) => (
     <Route path='/explore' element={<Explore />} />
     <Route path='/chat'element={user ? <Chat /> : <Navigate to='/login' />} />
     <Route path='/room/:roomId' element={user ?<VideoCall/>: <Navigate to='/login' />}/>
+    <Route path='/forgotpassword' element={<ForgotPasswordForm/>}/>
     <Route path='*' element={<Error />} /> {/* Fallback route for 404 */}
    
    

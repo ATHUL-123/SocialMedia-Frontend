@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import BlockPostModal from '../Modals/postBlock';
 
 function TableData({ report }) {
+    
     const [openModal, setOpenModal] = useState(false)
     const formattedDate = format(report.createdAt, 'dd-MM-yyyy');
     return (

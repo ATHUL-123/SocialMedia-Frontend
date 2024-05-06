@@ -109,7 +109,8 @@ const AddPost = ({ onClose }) => {
                                         </div>
                                     </>
                                 )}
-                                <input type="file" onChange={handleImageChange} />
+                               <input type="file" accept="image/*" onChange={handleImageChange} />
+
                             </div>
 
                             <div className="mt-6">

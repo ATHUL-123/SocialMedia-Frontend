@@ -174,7 +174,14 @@ export const userUrl = {
   submitKyc: `/api/users/kyc`,
 
   // Endpoint to check if KYC information is submitted
-  isKycSubmitted: `/api/users/isKyc`
+  isKycSubmitted: `/api/users/isKyc`,
+
+  //forgototp
+  sendForgotOtp:(email)=>`/api/users/forgotPassword?email=${email}`,
+
+  verifyForgotOTP:(email,otp)=>`/api/users/verifyOtp?email=${email}&otp=${otp}`,
+
+  changePassword:`/api/users/changepassword`
 }
 
 

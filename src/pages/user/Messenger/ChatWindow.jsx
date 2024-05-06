@@ -185,6 +185,9 @@ const ChatWindow = ({ currChat }) => {
   }, [currChat]);
 
   const handleSend = () => {
+    if(newMessage.trim()){
+
+
     const recieverId = currChat.members.find(member => member !== user._id)
     const data = {
       conversationId: currChat._id,
@@ -219,6 +222,7 @@ const ChatWindow = ({ currChat }) => {
       .catch((error) => {
         console.log(error);
       })
+    }
   }
 
 

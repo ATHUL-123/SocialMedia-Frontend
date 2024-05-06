@@ -1,5 +1,6 @@
 import { apiCall } from "./apiCalls";
 import { postUrl,authUrl,userUrl, chatUrl } from "../../const/routes";
+import { MdPassword } from "react-icons/md";
 
 
 
@@ -804,6 +805,54 @@ export const getNotificationCount=()=>{
   return new Promise ((resolve,reject)=>{
     try {
       apiCall('get',userUrl.getNoticationCount)
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const sendForgotOtp=(email)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',userUrl.sendForgotOtp(email))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const verifyForgotOtp=(email,otp)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('get',userUrl.verifyForgotOTP(email,otp))
+      .then((response)=>{
+        resolve(response);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+export const changePassword=(email,password)=>{
+  return new Promise ((resolve,reject)=>{
+    try {
+      apiCall('patch',userUrl.changePassword,{email,password})
       .then((response)=>{
         resolve(response);
       })
