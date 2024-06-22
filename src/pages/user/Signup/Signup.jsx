@@ -138,7 +138,7 @@ const SignupWithDesign = () => {
       </div>
     </Form>
   )}
-</Formik>
+  </Formik>
 
 
 
